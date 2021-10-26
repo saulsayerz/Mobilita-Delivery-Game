@@ -18,8 +18,8 @@ void ignoreBlank(){
     }
 }
 
-void startWord(){
-    start();
+void startWord(char filename[]){
+    start(filename);
     ignoreBlank();
     if (currentChar == MARK) {
         endWord = true;
@@ -44,7 +44,7 @@ void advWord () {
 void copyWord() {
     int i;
     i = 0;
-    while ((currentChar != MARK) && (currentChar != BLANK)){
+    while ((currentChar != MARK) && (currentChar != BLANK) && (currentChar != '\n')){
         if (i<50) {
             currentWord.contents[i] = currentChar;
             i++;
@@ -52,4 +52,19 @@ void copyWord() {
         adv();
     }
     currentWord.length = i;
+}
+
+int charToInt(char c){
+    return c - '0';
+}
+
+int kataToInt(Word kata){
+    int i,n,hasil;
+    i = 0;
+    hasil = 0;
+    while (i < kata.length) {
+        hasil = hasil*10 + charToInt(kata.contents[i]);
+        i ++ ;
+    }
+    return hasil;
 }

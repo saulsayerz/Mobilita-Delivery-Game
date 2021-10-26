@@ -8,10 +8,10 @@
 #include "matrix.h"
 
 typedef struct {
-    float contents[ROW_CAP][COL_CAP];
+    char contents[ROW_CAP][COL_CAP];
     int rowEff; 
     int colEff; 
-} MatrixFloat;
+} Matrix;
 
 /* *** Konstruktor membentuk Matrix *** */
 void CreateMatrix(int nRow, int nCol, Matrix *m){
@@ -60,10 +60,10 @@ void readMatrix(Matrix *m, int nRow, int nCol){
 	for (i = 0; i < nRow; i++){
 		for (j = 0; j < nCol; j++){
 			if (j==0) {
-                scanf("%d", &ELMT(*m,i,j));
+                scanf("%c", &ELMT(*m,i,j));
             }
             else {
-                scanf(" %d", &ELMT(*m,i,j));
+                scanf(" %c", &ELMT(*m,i,j));
             }
 		}
 	}
@@ -74,10 +74,10 @@ void displayMatrix(Matrix m){
 	for (i = 0; i < ROWS(m); i++){
 		for (j = 0; j < COLS(m); j++){
 			if (j==0) {
-                printf("%d", ELMT(m,i,j));
+                printf("%c", ELMT(m,i,j));
             }
             else {
-                printf(" %d", ELMT(m,i,j));
+                printf(" %c", ELMT(m,i,j));
             }
 		}
         if (i != getLastIdxRow(m)) {

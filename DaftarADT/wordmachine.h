@@ -24,7 +24,7 @@ void ignoreBlank();
    I.S. : currentChar sembarang 
    F.S. : currentChar ≠ BLANK atau currentChar = MARK */
 
-void startWord();
+void startWord(char filename[]);
 /* I.S. : currentChar sembarang 
    F.S. : endWord = true, dan currentChar = MARK; 
           atau endWord = false, currentWord adalah kata yang sudah diakuisisi,
@@ -44,6 +44,9 @@ void copyWord();
           currentChar = BLANK atau currentChar = MARK; 
           currentChar adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi CAPACITY, maka sisa kata terpotong */
+
+int charToInt(char c);
+int kataToInt(Word kata);
 
 #endif
 
