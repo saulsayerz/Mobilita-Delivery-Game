@@ -77,7 +77,7 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar) {
         x = kataToInt(currentWord);
         advWord();
         y = kataToInt(currentWord);
-        printf("%c %d %d\n", nama, x, y);
+        //printf("%c %d %d\n", nama, x, y); MENCETAK TIAP LOKASI
         CreateLoc(nama, x, y, &lok); // UNTUK SEMUA LOKASI
         ELEMEN(MAPLOC(*peta),i) = lok;
         adv();
@@ -134,6 +134,7 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar) {
     CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
     //cetakPesanan(pesan);
     daftar->contents[i] = pesan;
+    fclose(tape);
 }
 
 void cetakMatrix(Matrix m){
