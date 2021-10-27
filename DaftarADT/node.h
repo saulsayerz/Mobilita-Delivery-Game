@@ -2,8 +2,9 @@
 #define NODE_H
 
 #include <stdlib.h>
+#include "pesanan.h"
 
-typedef int ElType;
+typedef Pesanan ElType;
 typedef struct node* Address;
 typedef struct node {
     ElType info;
