@@ -66,4 +66,5 @@ void displayTodo(List l);
 int length(List l);
 /* Mengirimkan banyaknya elemen list; mengirimkan 0 jika list kosong */
 
+void displayInProgress(List l);
 #endif

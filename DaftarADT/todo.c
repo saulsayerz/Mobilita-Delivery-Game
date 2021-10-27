@@ -126,3 +126,17 @@ int length(List l)
     }
     return panjang;
 }
+
+void displayInProgress(List l){
+    Addres alamat = l;
+    
+    if (!isEmpty(l))
+    {
+        ElType info = INFO(alamat);
+        printf("Pesanan yang sedang diantarkan: \n1. ");
+        displayJenis(&info);
+        printf("(Tujuan: %c)", info.tujuan);
+    }else{
+        printf("Tidak ada pesanan saat ini.");
+    }
+}
