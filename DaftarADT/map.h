@@ -1,9 +1,10 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "boolean.h"
-#include "matrix.h"
-#include "point.h"
+#include "./ADTPrimitif/boolean.h"
+#include "./ADTPrimitif/matrix.h"
+#include "./ADTPrimitif/point.h"
+#include "pesanan.h"
 
 typedef struct
 {
@@ -26,19 +27,6 @@ typedef struct
    Matrix adjacency; /* banyaknya/ukuran kolom  peta yg terdefinisi */
 } Map;
 
-typedef struct {
-   int waktu; /* waktu pesanan datang*/
-   char asal;
-   char tujuan;
-   char jenis;
-   int perishable; // -1 
-} Pesanan;
-
-typedef struct{
-   Pesanan contents[30];
-   int nEff; // berapa pesanan
-} DaftarPesanan;
-
 //SELEKTOR
 #define MAPROW(M) (M).row
 #define MAPCOL(M) (M).col
@@ -47,22 +35,11 @@ typedef struct{
 #define LOCNAME(P) (P).nama
 #define LOCPOINT(P) (P).titik
 #define NEFF(l) (l).nEff
-#define CONTENTS(l) (l).contents
-#define ELEMEN(l, i) (l).contents[i]
-#define ELEMENM(M,i,j) (M).contents[(i)][(j)]
-#define KAPASITAS(l) (l).capacity
-#define WAKTU(p) (p).waktu
-#define ASAL(p) (p).asal
-#define TUJUAN(p) (p).tujuan
-#define JENIS(p) (p).jenis
-#define PERISH(p) (p).perishable
 
 void CreateMap(Map *peta);
 void CreateLoc(char nama, int i, int j, Lokasi *tempat);
-void CreatePesanan(int waktu, char asal,char tujuan, char jenis, int perishable, Pesanan *p);
 void displayMap(Map peta);
 void konfigurasi();
 void cetakMatrix(Matrix M);
-void cetakPesanan(Pesanan p);
 
 #endif

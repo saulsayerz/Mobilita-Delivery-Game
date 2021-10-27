@@ -1,9 +1,10 @@
 #include "map.h"
-#include "point.h"
-#include "wordmachine.h"
-//#include "charmachine.c"
+#include "./ADTPrimitif/point.c"
+#include "./ADTPrimitif/wordmachine.c"
+#include "./ADTPrimitif/charmachine.c"
 #include <stdio.h>
 #include <stdlib.h>
+static FILE * tape;
 
 void CreateMap(Map *peta){
     MAPROW(*peta) = 0;
@@ -21,13 +22,6 @@ void CreateLoc(char nama, int i, int j, Lokasi *tempat){
     Ordinat(LOCPOINT(*tempat)) = j; 
 }
 
-void CreatePesanan(int waktu, char asal,char tujuan, char jenis, int perishable, Pesanan *p){
-    WAKTU(*p) = waktu;
-    ASAL(*p) = asal;
-    TUJUAN(*p) = tujuan;
-    JENIS(*p) = jenis;
-    PERISH(*p) = perishable;
-}
 
 void displayMap(Map peta){ //INI BELUM JADIII
     Matrix m;
@@ -150,8 +144,4 @@ void cetakMatrix(Matrix m){
 		}
         printf("\n");
 	}
-}
-
-void cetakPesanan(Pesanan p) {
-    printf("%d %c %c %c %d\n", WAKTU(p),ASAL(p),TUJUAN(p),JENIS(p),PERISH(p));
 }
