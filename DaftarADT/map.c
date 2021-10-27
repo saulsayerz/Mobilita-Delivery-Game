@@ -25,20 +25,25 @@ void CreateLoc(char nama, int i, int j, Lokasi *tempat){
 
 void displayMap(Map peta){ //INI BELUM JADIII
     Matrix m;
-    int i,j;
+    int i,j,x,y;
     ROWS(m) = MAPROW(peta) +2;
     COLS(m) = MAPCOL(peta) +2;
     for (i = 0; i < MAPROW(peta)+2 ; i++) {
         for (j = 0; j < MAPCOL(peta)+2 ; j++){
             if (i==0 || j==0 || i==MAPROW(peta)+1||j==MAPCOL(peta)+1 ){
-                printf("*");
+                ELEMENM(m,i,j) = '*';
             }
             else {
-                printf(" ");
+                ELEMENM(m,i,j) = ' ';
             }
         }
-        printf("\n");
     }
+    for (i = 0; i < NEFF(MAPLOC(peta)) ; i++){
+        x = Absis(LOCPOINT(ELEMEN(MAPLOC(peta),i)));
+        y = Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta),i)));
+        ELEMENM(m,x,y) = LOCNAME(ELEMEN(MAPLOC(peta),i));
+    }
+    cetakMatrix(m);
 }
 
 void konfigurasi(Map *peta, DaftarPesanan *daftar) {
