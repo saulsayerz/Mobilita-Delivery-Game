@@ -6,13 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "matrix.h"
-
-typedef struct {
-    char contents[ROW_CAP][COL_CAP];
-    int rowEff; 
-    int colEff; 
-} Matrix;
-
 /* *** Konstruktor membentuk Matrix *** */
 void CreateMatrix(int nRow, int nCol, Matrix *m){
     ROWS(*m) = nRow ;

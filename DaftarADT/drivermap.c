@@ -6,7 +6,7 @@ int main() {
     CreateMap(&peta);
     MAPCOL(peta) = 8;
     MAPROW(peta) = 8;
-    //displayMap(peta);
+    displayMap(peta);
     konfigurasi();
     return 0;
 }

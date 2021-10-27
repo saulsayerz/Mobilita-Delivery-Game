@@ -47,6 +47,7 @@ void copyWord();
 
 int charToInt(char c);
 int kataToInt(Word kata);
+void displayKata();
 
 #endif
 

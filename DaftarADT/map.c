@@ -3,11 +3,16 @@
 #include "wordmachine.h"
 //#include "charmachine.c"
 #include <stdio.h>
+#include <stdlib.h>
 
 void CreateMap(Map *peta){
     MAPROW(*peta) = 0;
     MAPCOL(*peta) = 0;
-    MAPNEFF(*peta) = 0;
+    NEFF(MAPLOC(*peta)) = 0;
+    CONTENTS(MAPLOC(*peta)) = (Lokasi*) malloc (26 * sizeof(Lokasi));
+    KAPASITAS(MAPLOC(*peta)) = 26;
+    ROWS(MAPADJ(*peta)) = 0 ;
+    COLS(MAPADJ(*peta)) = 0 ;
 }
 
 void CreateLoc(char nama, int i, int j, Lokasi *tempat){
@@ -16,7 +21,15 @@ void CreateLoc(char nama, int i, int j, Lokasi *tempat){
     Ordinat(LOCPOINT(*tempat)) = j; 
 }
 
-void displayMap(Map peta){
+void CreatePesanan(int waktu, char asal,char tujuan, char jenis, int perishable, Pesanan *p){
+    WAKTU(*p) = waktu;
+    ASAL(*p) = asal;
+    TUJUAN(*p) = tujuan;
+    JENIS(*p) = jenis;
+    PERISH(*p) = perishable;
+}
+
+void displayMap(Map peta){ //INI BELUM JADIII
     Matrix m;
     int i,j;
     ROWS(m) = MAPROW(peta) +2;
@@ -34,13 +47,110 @@ void displayMap(Map peta){
     }
 }
 
-void konfigurasi() {
-    int baris, kolom;
+void konfigurasi(Map *peta, DaftarPesanan *daftar) {
+    int x,y,i,j ;
+    char nama;
+    int waktu,perishable;
+    char asal,tujuan,jenis;
+    Pesanan pesan;
+    Lokasi lok ;
     startWord("test.txt");
-    baris = kataToInt(currentWord);
+    MAPROW(*peta) = kataToInt(currentWord);
     advWord();
-    kolom = kataToInt(currentWord);
-    adv(); //ini untuk ngeskip \n
-    printf("%d %d", baris, kolom);
+    MAPCOL(*peta) = kataToInt(currentWord);
+    adv();
+    copyWord();
+    x = kataToInt(currentWord);
+    advWord();
+    y = kataToInt(currentWord);
+    CreateLoc('8', x, y, &lok); // UNTUK HEADQUARTERS
+    ELEMEN(MAPLOC(*peta),0) = lok; //MENGISI LOKASI HEADQUARTERS KE MAP
+    NEFF(MAPLOC(*peta)) = 1; //ISINYA MASIH HEADQUARTERS DOANG
+    adv();
+    copyWord();
+    NEFF(MAPLOC(*peta)) += kataToInt(currentWord); //Ini banyaknya lokasinya
+    adv();
+    for (i=1; i<NEFF(MAPLOC(*peta)); i++){
+        copyWord();
+        nama = currentWord.contents[0];
+        advWord();
+        x = kataToInt(currentWord);
+        advWord();
+        y = kataToInt(currentWord);
+        printf("%c %d %d\n", nama, x, y);
+        CreateLoc(nama, x, y, &lok); // UNTUK SEMUA LOKASI
+        ELEMEN(MAPLOC(*peta),i) = lok;
+        adv();
+    }
+    ROWS(MAPADJ(*peta)) = NEFF(MAPLOC(*peta));
+    COLS(MAPADJ(*peta)) = NEFF(MAPLOC(*peta));
+    for (i=0 ; i < NEFF(MAPLOC(*peta)); i++){
+        for (j=0 ; j < NEFF(MAPLOC(*peta));j++) {
+            ELEMENM(MAPADJ(*peta),i,j) = currentChar;
+            adv();
+            adv();
+        }
+    }
+    copyWord();
+    NEFF(*daftar) = kataToInt(currentWord);
+    adv();
+    for (i=0; i<NEFF(*daftar)-1;i++) {
+        copyWord();
+        waktu = kataToInt(currentWord);
+        advWord();
+        asal = currentWord.contents[0];
+        advWord();
+        tujuan = currentWord.contents[0];
+        advWord();
+        jenis = currentWord.contents[0];
+        if (currentWord.contents[0]== 'P'){
+            advWord();
+            perishable = kataToInt(currentWord);
+        }
+        else {
+            perishable = -1; // INI UNDEF
+        }
+        CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
+        //cetakPesanan(pesan);
+        daftar->contents[i] = pesan;
+        adv();
+    }
+    copyWord();
+    waktu = kataToInt(currentWord);
+    advWord();
+    asal = currentWord.contents[0];
+    advWord();
+    tujuan = currentWord.contents[0];
+    adv();
+    adv();
+    jenis = currentChar;
+    if (jenis== 'P'){
+        advWord();
+        perishable = kataToInt(currentWord);
+    }
+    else {
+        perishable = -1; // INI UNDEF
+    }
+    CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
+    //cetakPesanan(pesan);
+    daftar->contents[i] = pesan;
 }
 
+void cetakMatrix(Matrix m){
+    int i, j;
+	for (i = 0; i < ROWS(m); i++){
+		for (j = 0; j < COLS(m); j++){
+			if (j==0) {
+                printf("%c", ELMT(m,i,j));
+            }
+            else {
+                printf(" %c", ELMT(m,i,j));
+            }
+		}
+        printf("\n");
+	}
+}
+
+void cetakPesanan(Pesanan p) {
+    printf("%d %c %c %c %d\n", WAKTU(p),ASAL(p),TUJUAN(p),JENIS(p),PERISH(p));
+}

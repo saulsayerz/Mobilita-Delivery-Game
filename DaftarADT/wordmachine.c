@@ -68,3 +68,11 @@ int kataToInt(Word kata){
     }
     return hasil;
 }
+
+void displayKata() {
+    int i ;
+    for (i=0; i < currentWord.length; i++) {
+        printf("%c", currentWord.contents[i]);
+    }
+    printf("\n");
+}
