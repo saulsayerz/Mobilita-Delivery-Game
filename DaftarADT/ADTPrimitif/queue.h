@@ -5,14 +5,13 @@
 #define QUEUE_H
 
 #include "boolean.h"
+#include "../pesanan.h"
 
 #define IDX_UNDEF -1
-#define CAPACITY 100
 
 /* Definisi elemen dan address */
-typedef int ElType;
 typedef struct {
-	ElType buffer[CAPACITY]; 
+	Pesanan buffer[30]; 
 	int idxHead;
 	int idxTail;
 } Queue;
@@ -43,14 +42,14 @@ int length(Queue q);
 /* Mengirimkan banyaknya elemen queue. Mengirimkan 0 jika q kosong. */
 
 /* *** Primitif Add/Delete *** */
-void enqueue(Queue *q, ElType val);
+void enqueue(Queue *q, Pesanan val);
 /* Proses: Menambahkan val pada q dengan aturan FIFO */
 /* I.S. q mungkin kosong, tabel penampung elemen q TIDAK penuh */
 /* F.S. val menjadi TAIL yang baru, IDX_TAIL "mundur".
         Jika q penuh semu, maka perlu dilakukan aksi penggeseran "maju" elemen-elemen q
         menjadi rata kiri untuk membuat ruang kosong bagi TAIL baru  */
 
-void dequeue(Queue *q, ElType *val);
+void dequeue(Queue *q, Pesanan *val);
 /* Proses: Menghapus val pada q dengan aturan FIFO */
 /* I.S. q tidak mungkin kosong */
 /* F.S. val = nilai elemen HEAD pd I.S., HEAD dan IDX_HEAD "mundur"; 

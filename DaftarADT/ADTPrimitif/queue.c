@@ -38,9 +38,9 @@ int length(Queue q){
     return panjang ;
 }
 
-void enqueue(Queue *q, ElType val){
+void enqueue(Queue *q, Pesanan val){
     int i,awal;
-    ElType nilai;
+    Pesanan nilai;
     if (isEmpty(*q)) {
         IDX_HEAD(*q) = 0;
         IDX_TAIL(*q) = 0;
@@ -64,10 +64,10 @@ void enqueue(Queue *q, ElType val){
         Jika q penuh semu, maka perlu dilakukan aksi penggeseran "maju" elemen-elemen q
         menjadi rata kiri untuk membuat ruang kosong bagi TAIL baru  */
 
-void dequeue(Queue *q, ElType *val){
+void dequeue(Queue *q, Pesanan *val){
     /*int awal = IDX_HEAD(*q);
     int i;
-    ElType nilai ;
+    Pesanan nilai ;
     *val = HEAD(*q);
     if (length(*q) == 1) {
         CreateQueue(q) ;

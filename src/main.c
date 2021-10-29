@@ -5,8 +5,9 @@
 #include "../DaftarADT/inventory.c"
 #include "../DaftarADT/gadget.c"
 #include "../DaftarADT/pcolor.c"
+#include "../DaftarADT/ADTPrimitif/Queue.c"
 
-void move(Map peta, DaftarPesanan *daftar, Mobita *player){
+void move(Map peta, Queue *urutan, Mobita *player){
     printf("POSISI YANG DAPAT DICAPAI\n");
     int i, x ,y, baris, kolom=0 ,j,k;
     x = Absis(POSISI(*player)); // posisi sementara nobita
@@ -45,7 +46,7 @@ void move(Map peta, DaftarPesanan *daftar, Mobita *player){
     }
 }
 
-void displayMapColor(Map peta, DaftarPesanan *daftar, Mobita *player){ //INI BELUM JADIII
+void displayMapColor(Map peta, Queue *urutan, Mobita *player){ //INI BELUM JADIII
     Matrix m;
     int i,j,x,y;
     ROWS(m) = MAPROW(peta) +2;
@@ -91,15 +92,15 @@ void help() {
     printf("10. EXIT GAME\n");
 }
 
-void pilihCommand(Map peta, DaftarPesanan *daftar, Mobita *player){
+void pilihCommand(Map peta, Queue *urutan, Mobita *player){
     int pilihan ;
     printf("Silahkan pilih command: ");
     scanf("%d", &pilihan);
     if (pilihan == 1) {
-        move(peta, daftar, player);
+        move(peta, urutan, player);
     }
     else if (pilihan == 4) {
-        displayMapColor(peta, daftar, player);
+        displayMapColor(peta, urutan, player);
     }
     else if (pilihan == 9) {
         help();
@@ -107,14 +108,15 @@ void pilihCommand(Map peta, DaftarPesanan *daftar, Mobita *player){
     else {
         printf("Pilihan yang dimasukkan salah. Silahkan masukkan opsi lain\n");
     }
-    pilihCommand(peta, daftar,player);
+    pilihCommand(peta, urutan,player);
 }
 
 int main() {
-    int opsi;
+    int opsi,i;
     Map peta;
     DaftarPesanan daftar;
     Mobita player;
+    Queue urutan;
     CreateMap(&peta);
     printf("Selamat datang di game TUBES K2 Kelompok 6\nketik 1 untuk new game\nketik 2 untuk exit\nmasukkan opsi: ");
     scanf("%d", &opsi);
@@ -122,11 +124,16 @@ int main() {
         konfigurasi(&peta, &daftar); // ngebaca txt file ke program
         printf("Konfigurasi permainan berhasil\n");
         createMobita(&player);
+        sortPesanan(&daftar);
+        CreateQueue(&urutan);
+        for (int i = 0; i < NEFF(daftar) ; i++) {
+            enqueue(&urutan, ELEMEN(daftar,i));
+        }
         int x = Absis(LOCPOINT(ELEMEN(MAPLOC(peta),0))); // 0 adalah headquarter
         int y = Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta),0)));
         changePosisi(&player, x, y) ; // Mengubah koordinat awal nobita menjadi headquarter
         help();
-        pilihCommand(peta, &daftar, &player);
+        pilihCommand(peta, &urutan, &player);
     }
     return 0;
 }
