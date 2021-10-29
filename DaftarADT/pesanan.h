@@ -19,7 +19,7 @@ typedef struct{
 #define ELEMEN(l, i) (l).contents[i]
 #define ELEMENM(M,i,j) (M).contents[(i)][(j)]
 #define KAPASITAS(l) (l).capacity
-#define WAKTU(p) (p).waktu
+#define WAKTUPESANAN(p) (p).waktu
 #define ASAL(p) (p).asal
 #define TUJUAN(p) (p).tujuan
 #define JENIS(p) (p).jenis

@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 void CreatePesanan(int waktu, char asal,char tujuan, char jenis, int perishable, Pesanan *p){
-    WAKTU(*p) = waktu;
+    WAKTUPESANAN(*p) = waktu;
     ASAL(*p) = asal;
     TUJUAN(*p) = tujuan;
     JENIS(*p) = jenis;
@@ -10,5 +10,5 @@ void CreatePesanan(int waktu, char asal,char tujuan, char jenis, int perishable,
 }
 
 void cetakPesanan(Pesanan p) {
-    printf("%d %c %c %c %d\n", WAKTU(p),ASAL(p),TUJUAN(p),JENIS(p),PERISH(p));
+    printf("%d %c %c %c %d\n", WAKTUPESANAN(p),ASAL(p),TUJUAN(p),JENIS(p),PERISH(p));
 }

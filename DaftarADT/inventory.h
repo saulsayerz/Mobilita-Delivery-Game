@@ -24,7 +24,7 @@ void displayInventory(Inventory i);
 /**
  * Set Inventory in an index
  **/
-void setGadgetFromInventoryOnIDX(Inventory *i, int idx);
+void setGadgetFromInventoryOnIDX(Inventory *i, int idx, Gadget g);
 
 /**
  * Delete gadget in Inventory in an index
@@ -35,7 +35,7 @@ void deleteGadgetFromInvetoryOnIDX(Inventory *i, int idx);
  * Take gadget of idx
  * return the gadget
  **/
-void takeGadgetFromInventory(Inventory *i, int idx);
+void takeGadgetFromInventory(Inventory *i, int idx, Gadget *g);
 
 /**
  * Add gadget to inventory

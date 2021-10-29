@@ -1,1 +1,2 @@
-printf("%d %d\n", MAPROW(peta), MAPCOL(peta));
+
+    if (pilihan == 1) {
