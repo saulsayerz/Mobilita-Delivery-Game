@@ -1,5 +1,6 @@
 #ifndef MOBITA_H
 #define MOBITA_H
+#include "todo.h"
 #include "inventory.h"
 #include "./ADTPrimitif/point.h"
 
@@ -9,12 +10,16 @@ typedef struct mobita
     int waktu;
     int uang;
     POINT posisi;
+    Address toDoList;
+    Address inProgress;
 } Mobita;
 
 #define INVENTORY(m) (m).inventory
 #define WAKTU(m) (m).waktu
 #define UANG(m) (m).uang
 #define POSISI(m) (m).posisi
+#define TODO(m) (m).toDoList
+#define INPROGRESS(m) (m).inProgress
 
 /**
  * Inisialisasi Mobita
@@ -35,6 +40,11 @@ void useUang(Mobita *m, int jumlah);
  * Menambahkan uang
  **/
 void addUang(Mobita *m, int jumlah);
+
+/**
+ * Mengecek jumlah barang heavy pada in progress
+ **/
+int checkHeavy(Mobita *m);
 
 /**
  * Mengubah posisi

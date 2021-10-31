@@ -16,7 +16,7 @@ void CreateQueue(Queue *q){
 /* - Index tail bernilai IDX_UNDEF */
 /* Proses : Melakukan alokasi, membuat sebuah q kosong */
 
-boolean isEmpty(Queue q){
+boolean isEmptyQueue(Queue q){
     return (IDX_HEAD(q) == IDX_UNDEF && IDX_TAIL(q) == IDX_UNDEF);
 }
 /* Mengirim true jika q kosong: lihat definisi di atas */
@@ -27,9 +27,9 @@ boolean isFull(Queue q){
 /* Mengirim true jika tabel penampung elemen q sudah penuh */
 /* yaitu jika index head bernilai 0 dan index tail bernilai CAPACITY-1 */
 
-int length(Queue q){
+int lengthQueue(Queue q){
     int panjang ;
-    if (isEmpty(q)) {
+    if (isEmptyQueue(q)) {
         panjang = 0;
     }
     else {
@@ -41,7 +41,7 @@ int length(Queue q){
 void enqueue(Queue *q, Pesanan val){
     int i,awal;
     Pesanan nilai;
-    if (isEmpty(*q)) {
+    if (isEmptyQueue(*q)) {
         IDX_HEAD(*q) = 0;
         IDX_TAIL(*q) = 0;
         HEAD(*q) = val;
@@ -83,7 +83,7 @@ void dequeue(Queue *q, Pesanan *val){
     IDX_TAIL(*q) -= 1;
     IDX_HEAD(*q) = awal;*/
     *val = HEAD(*q);
-    if (length(*q) == 1) {
+    if (lengthQueue(*q) == 1) {
         CreateQueue(q) ;
     }
     else {
@@ -99,7 +99,7 @@ void displayQueue(Queue q){
     int i;
     int awal = IDX_HEAD(q) ;
     printf("[");
-    if (!isEmpty(q)) {
+    if (!isEmptyQueue(q)) {
         for(i=awal; i < IDX_TAIL(q)+1 ; i++){
             IDX_HEAD(q) = i;
             printf("%d", HEAD(q));

@@ -31,7 +31,7 @@ boolean isIdxEff(Matrix m, Index i, Index j){
     return (i >=0) && (i<ROWS(m)) && (j >=0) && (j<COLS(m)) ;
 }
 
-ElType getElmtDiagonal(Matrix m, Index i){
+char getElmtDiagonal(Matrix m, Index i){
     return ELMT(m,i,i) ;
 }
 
@@ -108,7 +108,7 @@ Matrix subtractMatrix(Matrix m1, Matrix m2){
 Matrix multiplyMatrix(Matrix m1, Matrix m2){
     Matrix m;
     int i,j,k ;
-    ElType total ;
+    char total ;
     ROWS(m) = ROWS(m1) ;
     COLS(m) = COLS(m2) ;
     for (i = 0; i < ROWS(m1); i++){
@@ -123,7 +123,7 @@ Matrix multiplyMatrix(Matrix m1, Matrix m2){
     return m;
 }
 
-Matrix multiplyConst(Matrix m, ElType x){
+Matrix multiplyConst(Matrix m, char x){
     Matrix mhasil;
     ROWS(mhasil) = ROWS(m) ;
     COLS(mhasil) = COLS(m) ;
@@ -136,7 +136,7 @@ Matrix multiplyConst(Matrix m, ElType x){
     return mhasil;
 }
 
-void pMultiplyConst(Matrix *m, ElType k){
+void pMultiplyConst(Matrix *m, char k){
     int i,j ;
     for (i = 0; i < ROWS(*m); i++){
 	    for (j = 0; j < COLS(*m); j++){
@@ -271,7 +271,7 @@ float determinant(Matrix m){
 
 void transpose(Matrix *m){
     int i,j ;
-    ElType sementara ;
+    char sementara ;
     for (i = 0; i < ROWS(*m); i++){
 	    for (j = 0; j <= i ; j++){ 
             sementara = ELMT(*m,i,j);

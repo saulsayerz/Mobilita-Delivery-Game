@@ -13,7 +13,7 @@ void createMobita(Mobita *m){
     // assign tiap properti objek
     INVENTORY(*m) = i;
     UANG(*m) = 0;
-    WAKTU(*m) = 0;
+    WAKTU(*m) = -1;
     POSISI(*m) = p;
 }
 
@@ -51,9 +51,35 @@ void addUang(Mobita *m, int jumlah){
 }
 
 /**
+ * Mengecek apakah jumlah item heavy pada inprogress
+ **/
+int checkHeavy(Mobita *m){
+    int jumlahHeavy = 0;
+    Address p = INPROGRESS(*m);
+    while (p != NULL) {
+        if (JENIS(INFO(p)) == 'H'){
+            jumlahHeavy++;
+        }
+        p = NEXT(p);
+    }
+    return jumlahHeavy;
+}
+
+
+/**
  * Mengubah posisi
  **/
 void changePosisi(Mobita *m, int absis, int ordinat){
     Ordinat(POSISI(*m)) = ordinat;
     Absis(POSISI(*m)) = absis;
+
+    int heavy = checkHeavy(m);
+    if (heavy != 0){
+        int i;
+        for(i = 0;i<heavy;i++){
+            addTwoToWaktu(m);
+        }
+    } else {
+        addOneToWaktu(m);
+    }
 }
