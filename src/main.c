@@ -42,6 +42,16 @@ void move(Map peta, Queue *urutan, Mobita *player){
         x = Absis(LOCPOINT(ELEMEN(dapatdicapai,pilihan-1)));
         y = Ordinat(LOCPOINT(ELEMEN(dapatdicapai,pilihan-1)));
         changePosisi(player, x, y);
+        // Untuk mencari apakah ada Heavy item pada inprogress
+        // if () {
+        //     addTwoToWaktu(*player)
+        // } else {
+        //     addOneToWaktu(*player);
+        // }
+
+        // sementara masih pake add one dulu, karena currently gabisa ngecek in progress
+        addOneToWaktu(&player);
+        printf("Waktu : %d\n", WAKTU(*player));
         printf("Mobita sekarang berada di titik %c (%d,%d)!\n",LOCNAME(ELEMEN(dapatdicapai,pilihan -1)), x, y);
     }
 }

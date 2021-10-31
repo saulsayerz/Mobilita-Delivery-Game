@@ -25,6 +25,13 @@ void addOneToWaktu(Mobita *m){
 }
 
 /**
+ * Menambahkan dua unit ke waktu
+ **/
+void addTwoToWaktu(Mobita *m){
+    WAKTU(*m) += 2;
+}
+
+/**
  * Mengurangi uang
  * Jika uang kurang, print "Uang tidak cukup untuk membeli gadget!"
  **/
