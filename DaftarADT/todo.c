@@ -128,7 +128,7 @@ int length(List l)
 }
 
 void displayInProgress(List l){
-    Addres alamat = l;
+    Address alamat = l;
     
     if (!isEmpty(l))
     {

@@ -81,16 +81,17 @@ void displayMapColor(Map peta, Queue *urutan, Mobita *player){ //INI BELUM JADII
 }
 
 void help() {
-    printf("1. MOVE\n");
-    printf("2. PICK UP\n");
-    printf("3. DROP OFF\n");
-    printf("4. DISPLAY MAP\n");
-    printf("5. DISPLAY TO DO LIST\n");
-    printf("6. DISPLAY IN PROGRESS\n");
-    printf("7. BUY\n");
-    printf("8. INVENTORY\n");
-    printf("9. HELP\n");
+    printf("1. MOVE\n"); //samuel
+    printf("2. PICK UP\n"); // samuel
+    printf("3. DROP OFF\n"); // samuel
+    printf("4. DISPLAY MAP\n"); // saul
+    printf("5. DISPLAY TO DO LIST\n"); // lewiss
+    printf("6. DISPLAY IN PROGRESS\n"); // lewiss
+    printf("7. BUY\n"); //jova
+    printf("8. INVENTORY\n"); //ave mungkin
+    printf("9. HELP\n");//udah
     printf("10. EXIT GAME\n");
+    //harus ada yang ngeconvert Queue ke todolist dan inprogress berarti, mungkin diambil 5 6 juga soalnya mudah kan display doang
 }
 
 void pilihCommand(Map peta, Queue *urutan, Mobita *player){
@@ -100,6 +101,9 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player){
     if (pilihan == 1) {
         move(peta, urutan, player);
     }
+    /*else if (pilihan ==3 ) {
+
+    }*/
     else if (pilihan == 4) {
         displayMapColor(peta, urutan, player);
     }
@@ -109,6 +113,7 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player){
     else {
         printf("Pilihan yang dimasukkan salah. Silahkan masukkan opsi lain\n");
     }
+    
     pilihCommand(peta, urutan,player);
 }
 
@@ -140,3 +145,6 @@ int main() {
     return 0;
 }
 
+// Queue [9 elemen], dequeue --> [8elemen]
+// in progress sama to do list linked list [kosong] [kosong]
+// to do list [1 elemen todolist] [kosong]

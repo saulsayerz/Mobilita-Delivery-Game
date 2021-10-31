@@ -27,5 +27,6 @@ typedef struct{
 
 void CreatePesanan(int waktu, char asal,char tujuan, char jenis, int perishable, Pesanan *p);
 void cetakPesanan(Pesanan p);
+void sortPesanan(DaftarPesanan *daftar);
 
 #endif
