@@ -42,6 +42,7 @@ void move(Map peta, Queue *urutan, Mobita *player){
         x = Absis(LOCPOINT(ELEMEN(dapatdicapai,pilihan-1)));
         y = Ordinat(LOCPOINT(ELEMEN(dapatdicapai,pilihan-1)));
         changePosisi(player, x, y);
+        printf("Waktu : %d\n", WAKTU(*player));
         printf("Mobita sekarang berada di titik %c (%d,%d)!\n",LOCNAME(ELEMEN(dapatdicapai,pilihan -1)), x, y);
     }
 }
@@ -126,7 +127,8 @@ int main() {
         createMobita(&player);
         sortPesanan(&daftar);
         CreateQueue(&urutan);
-        for (int i = 0; i < NEFF(daftar) ; i++) {
+        int i;
+        for (i = 0; i < NEFF(daftar) ; i++) {
             enqueue(&urutan, ELEMEN(daftar,i));
         }
         int x = Absis(LOCPOINT(ELEMEN(MAPLOC(peta),0))); // 0 adalah headquarter
