@@ -35,6 +35,10 @@ void move(Map peta, Queue *urutan, Mobita *player){
     int pilihan ;
     printf("ENTER COMMAND: ");
     scanf("%d", &pilihan);
+    while (pilihan <0 || pilihan >NEFF(dapatdicapai)) {
+        printf("Input salah! Masukkan ulang command\nCOMMAND: ");
+        scanf("%d", &pilihan);
+    }
     if (pilihan== 0) {
         printf("Kembali");
     }
