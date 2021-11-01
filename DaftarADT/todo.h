@@ -43,14 +43,15 @@ void insertLast(List *l, ElType val);
 /* bernilai val jika alokasi berhasil. Jika alokasi gagal: I.S.= F.S. */
 
 /*** PENGHAPUSAN ELEMEN ***/
-void deleteFirst(List *l, ElType *val);
+void deleteFirst(List *l);
 /* I.S. List l tidak kosong  */
 /* F.S. Elemen pertama list dihapus: nilai info disimpan pada x */
 /*      dan alamat elemen pertama di-dealokasi */
-void deleteLast(List *l, ElType *val);
+void deleteLast(List *l);
 /* I.S. list tidak kosong */
 /* F.S. Elemen terakhir list dihapus: nilai info disimpan pada x */
 /*      dan alamat elemen terakhir di-dealokasi */
+void deleteAt(List *l, int idx);
 
 /****************** PROSES SEMUA ELEMEN LIST ******************/
 void displayJenis(Pesanan *p);

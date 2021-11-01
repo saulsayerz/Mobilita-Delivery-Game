@@ -50,7 +50,7 @@ void move(Map peta, Queue *urutan, Mobita *player)
     }
     if (pilihan == 0)
     {
-        printf("Kembali");
+        printf("Kembali\n");
     }
     else
     {
@@ -59,6 +59,51 @@ void move(Map peta, Queue *urutan, Mobita *player)
         changePosisi(player, x, y);
         printf("Waktu : %d\n", WAKTU(*player));
         printf("Mobita sekarang berada di titik %c (%d,%d)!\n", LOCNAME(ELEMEN(dapatdicapai, pilihan - 1)), x, y);
+    }
+}
+
+void pickUp(Map peta, Queue *urutan, Mobita *player)
+{
+    int i, x, y;
+    x = Absis(POSISI(*player));
+    y = Ordinat(POSISI(*player));
+
+    char lokasiMobita;
+    for (i = 0; i < NEFF(MAPLOC(peta)); i++)
+    {
+        if (x == Absis(LOCPOINT(ELEMEN(MAPLOC(peta), i))) && y == Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta), i))))
+        {
+            lokasiMobita = LOCNAME(ELEMEN(MAPLOC(peta), i));
+        }
+    }
+    int idx = 0;
+    boolean exist = false;
+    Address p = TODO(*player);
+    printf("Nama lokasi mobita sekarang: %c\n", lokasiMobita);
+    while (p != NULL && !exist)
+    {
+        if (p != NULL && lokasiMobita == ASAL(INFO(p)))
+        {
+            exist = true;
+        } else 
+        {
+            p = NEXT(p);
+            idx++;
+        }
+    }
+
+    if (exist)
+    {
+        printf("Pesanan berupa ");
+        displayJenis(&INFO(p));
+        printf(" berhasil diambil!!\n");
+        printf("Tujuan Pesanan: %c\n", TUJUAN(INFO(p)));
+        insertFirst(&INPROGRESS(*player), INFO(p));
+        deleteAt(&TODO(*player), idx);
+    }
+    else
+    {
+        printf("Pesanan tidak ditemukan!");
     }
 }
 
@@ -107,14 +152,15 @@ void displayMapColor(Map peta, Queue *urutan, Mobita *player)
 
 void buyGadget(Mobita *player, Gadget *gadget)
 {
+    int i;
     printf("\n");
     printf("Uang anda sekarang: %d Yen\n", UANG(*player));
     printf("Gadget yang tersedia: \n");
-    for (int i = 0; i < 5; i++)
+    for (i = 0; i < 5; i++)
     {
         printf("%d. ", (i + 1));
         displayName(NAMAGADGET(*(gadget + i)));
-        printf("(%d Yen)", HARGAGADGET(*(gadget+i)));
+        printf("(%d Yen)", HARGAGADGET(*(gadget + i)));
         printf("\n");
     }
     printf("Gadget mana yang ingin kau beli? (ketik 0 jika ingin kembali)\n");
@@ -137,12 +183,12 @@ void buyGadget(Mobita *player, Gadget *gadget)
 
 void help()
 {
-    printf("1. MOVE\n");                //samuel
-    printf("2. PICK UP\n");             // samuel
+    printf("1. MOVE\n");                // samuel udah
+    printf("2. PICK UP\n");             // samuel udah
     printf("3. DROP OFF\n");            // samuel
     printf("4. DISPLAY MAP\n");         // saul
-    printf("5. DISPLAY TO DO LIST\n");  // lewiss
-    printf("6. DISPLAY IN PROGRESS\n"); // lewiss
+    printf("5. DISPLAY TO DO LIST\n");  // lewiss udah
+    printf("6. DISPLAY IN PROGRESS\n"); // lewiss udah
     printf("7. BUY\n");                 //jova
     printf("8. INVENTORY\n");           //ave mungkin
     printf("9. HELP\n");                //udah
@@ -159,6 +205,10 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
     {
         move(peta, urutan, player);
     }
+    else if (pilihan == 2)
+    {
+        pickUp(peta, urutan, player);
+    }
     /*else if (pilihan ==3 ) {
 
     }*/
@@ -169,6 +219,10 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
     else if (pilihan == 5)
     {
         displayTodo(TODO(*player));
+    }
+    else if (pilihan == 6)
+    {
+        displayInProgress(INPROGRESS(*player));
     }
     else if (pilihan == 7)
     {
@@ -181,6 +235,14 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
     else
     {
         printf("Pilihan yang dimasukkan salah. Silahkan masukkan opsi lain\n");
+    }
+
+    int j = 0;
+    while (WAKTUPESANAN(HEAD(*urutan)) <= WAKTU(*player))
+    {
+        ElType val;
+        dequeue(urutan, &val);
+        insertFirst(&TODO(*player), val);
     }
 
     pilihCommand(peta, urutan, player, gadget);
@@ -204,7 +266,6 @@ int main()
         createMobita(&player);
         sortPesanan(&daftar);
         CreateQueue(&urutan);
-        int i;
         for (i = 0; i < NEFF(daftar); i++)
         {
             enqueue(&urutan, ELEMEN(daftar, i));
@@ -214,12 +275,6 @@ int main()
         changePosisi(&player, x, y); // Mengubah koordinat awal nobita menjadi headquarter
         help();
         int j = 0;
-        while (WAKTUPESANAN(ELEMEN(daftar, j)) <= WAKTU(player))
-        {
-            ElType val;
-            dequeue(&urutan, &val);
-            insertFirst(TODO(player), val);
-        }
         gadgets[0] = newGadget("Kain Pembungkus Waktu", 800);
         gadgets[1] = newGadget("Senter Pembesar", 1200);
         gadgets[2] = newGadget("Pintu Kemana Saja", 1500);

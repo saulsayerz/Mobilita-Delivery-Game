@@ -22,7 +22,7 @@ boolean isEmptyQueue(Queue q){
 /* Mengirim true jika q kosong: lihat definisi di atas */
 
 boolean isFull(Queue q){
-    return (IDX_HEAD(q) == 0 && IDX_TAIL(q) == (CAPACITY -1));
+    return (IDX_HEAD(q) == 0 && IDX_TAIL(q) == (CAPACITYQ -1));
 }
 /* Mengirim true jika tabel penampung elemen q sudah penuh */
 /* yaitu jika index head bernilai 0 dan index tail bernilai CAPACITY-1 */

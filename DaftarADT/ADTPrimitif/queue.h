@@ -8,7 +8,7 @@
 #include "../pesanan.h"
 
 #define IDX_UNDEF -1
-#define CAPACITY 30
+#define CAPACITYQ 30
 
 /* Definisi elemen dan address */
 typedef struct {

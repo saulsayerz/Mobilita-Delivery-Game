@@ -45,15 +45,15 @@ void insertLast(List *l, ElType val)
     }
 }
 
-void deleteFirst(List *l, ElType *val)
+void deleteFirst(List *l)
 {
     Address alamat = *l;
-    *val = INFO(alamat);
+    // *val = INFO(alamat);
     *l = NEXT(alamat);
     free(alamat);
 }
 
-void deleteLast(List *l, ElType *val)
+void deleteLast(List *l)
 {
     Address alamat, lokasi;
     alamat = *l;
@@ -71,8 +71,35 @@ void deleteLast(List *l, ElType *val)
     {
         NEXT(lokasi) = NULL;
     }
-    *val = INFO(alamat);
+    // *val = INFO(alamat);
     free(alamat);
+}
+
+void deleteAt(List *l, int idx)
+{
+    /* I.S. list tidak kosong, idx indeks yang valid dalam l, yaitu 0..length(l) */
+    /* F.S. val diset dengan elemen l pada indeks ke-idx. */
+    /*      Elemen l pada indeks ke-idx dihapus dari l */
+    if (idx == 0)
+    {
+        // deleteFirst(l, val);
+        deleteFirst(l);
+    }
+    else
+    {
+        Address p, q;
+        q = *l;
+        int count = 0;
+        while (count < idx - 1)
+        {
+            count++;
+            q = NEXT(q);
+        }
+        p = NEXT(q);
+        // *val = INFO(p);
+        NEXT(q) = NEXT(p);
+        free(p);
+    }
 }
 
 void displayJenis(Pesanan *p)
@@ -80,19 +107,19 @@ void displayJenis(Pesanan *p)
     switch (JENIS(*p))
     {
     case 'N':
-        printf("(Normal Item)\n");
+        printf("Normal Item");
         break;
     
     case 'H':
-        printf("(Heavy Item)\n");
+        printf("Heavy Item");
         break;
 
     case 'V':
-        printf("(VIP Item)\n");
+        printf("VIP Item");
         break;
     
     case 'P':
-        printf("(Perishable Item, sisa waktu %d)\n", WAKTUPESANAN(*p));
+        printf("Perishable Item, sisa waktu %d", WAKTUPESANAN(*p));
 
     default:
         break;
@@ -102,17 +129,25 @@ void displayJenis(Pesanan *p)
 void displayTodo(List l)
 {
     Address alamat = l;
-    int i = 0;
+    int i = 1;
     if (!isEmpty(l))
     {
         ElType info = INFO(alamat);
-        while (alamat != NULL)
+        printf("Pesanan pada To Do List:\n");
+        while (alamat != NULL && NEXT(alamat) != NULL)
         {
-            printf("%d. %c -> %c ", i, info.asal, info.tujuan);
+            printf("%d. %c -> %c (", i, info.asal, info.tujuan);
             displayJenis(&info);
+            printf(")\n");
             alamat = NEXT(alamat);
+            info = INFO(alamat);
             i++;
         }
+        printf("%d. %c -> %c (", i, info.asal, info.tujuan);
+        displayJenis(&info);
+        printf(")\n");
+    } else {
+        printf("Tidak ada To Do List\n");
     }
 }
 
@@ -130,14 +165,24 @@ int length(List l)
 
 void displayInProgress(List l){
     Address alamat = l;
-    
+    int i = 1;
     if (!isEmpty(l))
     {
         ElType info = INFO(alamat);
-        printf("Pesanan yang sedang diantarkan: \n1. ");
+        printf("Pesanan yang sedang diantarkan: \n");
+        while (alamat != NULL && NEXT(alamat) != NULL)
+        {
+            printf("%d. ", i);
+            displayJenis(&info);
+            printf(" (Tujuan : %c)", info.tujuan);
+            alamat = NEXT(alamat);
+            info = INFO(alamat);
+            i++;
+        }
+        printf("%d. ", i);
         displayJenis(&info);
-        printf("(Tujuan: %c)", info.tujuan);
-    }else{
-        printf("Tidak ada pesanan saat ini.");
+        printf(" (Tujuan : %c)\n", info.tujuan);
+    } else {
+        printf("Tidak ada pesanan yang sedang diantarkan\n");
     }
 }
