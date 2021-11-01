@@ -39,8 +39,8 @@ int lengthQueue(Queue q){
 }
 
 void enqueue(Queue *q, Pesanan val){
-    int i,awal;
-    Pesanan nilai;
+    int i;
+    // Pesanan nilai;
     if (isEmptyQueue(*q)) {
         IDX_HEAD(*q) = 0;
         IDX_TAIL(*q) = 0;

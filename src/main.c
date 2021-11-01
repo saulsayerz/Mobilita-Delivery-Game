@@ -105,6 +105,36 @@ void displayMapColor(Map peta, Queue *urutan, Mobita *player)
     }
 }
 
+void buyGadget(Mobita *player, Gadget *gadget)
+{
+    printf("\n");
+    printf("Uang anda sekarang: %d Yen\n", UANG(*player));
+    printf("Gadget yang tersedia: \n");
+    for (int i = 0; i < 5; i++)
+    {
+        printf("%d. ", (i + 1));
+        displayName(NAMAGADGET(*(gadget + i)));
+        printf("(%d Yen)", HARGAGADGET(*(gadget+i)));
+        printf("\n");
+    }
+    printf("Gadget mana yang ingin kau beli? (ketik 0 jika ingin kembali)\n");
+    printf("ENTER COMMAND: ");
+    int choice;
+    scanf("%d", &choice);
+    if (choice)
+    {
+        if (UANG(*player) < HARGAGADGET(*(gadget + choice + 1)))
+        {
+            printf("Uang tidak cukup untuk membeli gadget, silahkan top up\n");
+        }
+        else
+        {
+            // Berhasil geming
+        }
+    }
+    printf("\n");
+}
+
 void help()
 {
     printf("1. MOVE\n");                //samuel
@@ -120,7 +150,7 @@ void help()
     //harus ada yang ngeconvert Queue ke todolist dan inprogress berarti, mungkin diambil 5 6 juga soalnya mudah kan display doang
 }
 
-void pilihCommand(Map peta, Queue *urutan, Mobita *player)
+void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
 {
     int pilihan;
     printf("Silahkan pilih command: ");
@@ -140,6 +170,10 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player)
     {
         displayTodo(TODO(*player));
     }
+    else if (pilihan == 7)
+    {
+        buyGadget(player, gadget);
+    }
     else if (pilihan == 9)
     {
         help();
@@ -149,7 +183,7 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player)
         printf("Pilihan yang dimasukkan salah. Silahkan masukkan opsi lain\n");
     }
 
-    pilihCommand(peta, urutan, player);
+    pilihCommand(peta, urutan, player, gadget);
 }
 
 int main()
@@ -159,6 +193,7 @@ int main()
     DaftarPesanan daftar;
     Mobita player;
     Queue urutan;
+    Gadget gadgets[5];
     CreateMap(&peta);
     printf("Selamat datang di game TUBES K2 Kelompok 6\nketik 1 untuk new game\nketik 2 untuk exit\nmasukkan opsi: ");
     scanf("%d", &opsi);
@@ -185,7 +220,12 @@ int main()
             dequeue(&urutan, &val);
             insertFirst(TODO(player), val);
         }
-        pilihCommand(peta, &urutan, &player);
+        gadgets[0] = newGadget("Kain Pembungkus Waktu", 800);
+        gadgets[1] = newGadget("Senter Pembesar", 1200);
+        gadgets[2] = newGadget("Pintu Kemana Saja", 1500);
+        gadgets[3] = newGadget("Mesin Waktu", 3000);
+        gadgets[4] = newGadget("Senter Pengecil", 800);
+        pilihCommand(peta, &urutan, &player, gadgets);
     }
     return 0;
 }

@@ -24,4 +24,8 @@ void createGadget(Gadget *g);
  **/
 boolean isGadgetUNDEF(Gadget g);
 
+Gadget newGadget(char *nama, int harga);
+
+void displayName(char *nama);
+
 #endif

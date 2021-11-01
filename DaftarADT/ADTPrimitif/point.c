@@ -15,14 +15,14 @@ POINT MakePOINT (int X, int Y){
 }
 
 void BacaPOINT (POINT * P){
-    float x, y;
+    int x, y;
     scanf("%d %d", &x, &y);
     Absis(*P) = x ;
     Ordinat(*P) = y;
 }
 
 void TulisPOINT (POINT P){
-    printf("(%.2f,%.2f)", Absis(P), Ordinat(P) );
+    printf("(%d,%d)", Absis(P), Ordinat(P) );
 }
 
 boolean EQ (POINT P1, POINT P2) {
@@ -72,7 +72,7 @@ POINT NextY (POINT P){
     return P;
 }
 
-POINT PlusDelta (POINT P, float deltaX, float deltaY){
+POINT PlusDelta (POINT P, int deltaX, int deltaY){
     Absis(P)=Absis(P)+deltaX;
     Ordinat(P)=Ordinat(P)+deltaY;
     return P;

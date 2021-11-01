@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "todo.h"
+#include "pesanan.h"
 
 void CreateTodoList(List *l)
 {
@@ -91,7 +92,7 @@ void displayJenis(Pesanan *p)
         break;
     
     case 'P':
-        printf("(Perishable Item, sisa waktu %d)\n", WAKTU(*p));
+        printf("(Perishable Item, sisa waktu %d)\n", WAKTUPESANAN(*p));
 
     default:
         break;

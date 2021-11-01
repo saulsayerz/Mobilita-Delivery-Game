@@ -7,6 +7,8 @@
 #include "boolean.h"
 #include "../pesanan.h"
 
+#define IDX_UNDEF -1
+#define CAPACITY 30
 
 /* Definisi elemen dan address */
 typedef struct {

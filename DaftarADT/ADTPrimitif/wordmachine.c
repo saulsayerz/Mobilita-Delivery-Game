@@ -59,7 +59,7 @@ int charToInt(char c){
 }
 
 int kataToInt(Word kata){
-    int i,n,hasil;
+    int i, hasil;
     i = 0;
     hasil = 0;
     while (i < kata.length) {
