@@ -10,8 +10,8 @@ typedef struct mobita
     int waktu;
     int uang;
     POINT posisi;
-    Address toDoList;
-    Address inProgress;
+    List toDoList;
+    List inProgress;
 } Mobita;
 
 #define INVENTORY(m) (m).inventory

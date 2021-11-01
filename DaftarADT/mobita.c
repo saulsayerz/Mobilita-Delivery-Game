@@ -15,8 +15,8 @@ void createMobita(Mobita *m){
     UANG(*m) = 0;
     WAKTU(*m) = -1;
     POSISI(*m) = p;
-    CreateTodoList(TODO(*m));
-    CreateTodoList(INPROGRESS(*m));
+    TODO(*m) = NULL;
+    INPROGRESS(*m) = NULL;
 }
 
 /**
