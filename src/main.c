@@ -156,9 +156,35 @@ void dropOff(Map peta, Queue *urutan, Mobita *player)
 void displayMapColor(Map peta, Queue *urutan, Mobita *player)
 { //INI BELUM JADIII
     Matrix m;
-    int i, j, x, y;
     ROWS(m) = MAPROW(peta) + 2;
     COLS(m) = MAPCOL(peta) + 2;
+    Address p;
+    int cetaknobita, cetaktodo, cetakprogress, cetakdicapai;
+    int i, j, x, y,baris=0,kolom=0,k;
+    x = Absis(POSISI(*player)); // posisi sementara nobita
+    y = Ordinat(POSISI(*player));
+    POINT titik = MakePOINT(0,0); 
+    ListDinamis dapatdicapai;
+    CONTENTS(dapatdicapai) = (Lokasi *)malloc(26 * sizeof(Lokasi));
+    NEFF(dapatdicapai) = 0;
+    KAPASITAS(dapatdicapai) = 26;
+    for (i = 0; i < NEFF(MAPLOC(peta)); i++)
+    { // searching barisnya
+        if (x == Absis(LOCPOINT(ELEMEN(MAPLOC(peta), i))) && y == Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta), i))))
+        {
+            baris = i; // harusnya pake while deh algoritma searching tapi mager
+        }
+    }
+    for (j = 0; j < NEFF(MAPLOC(peta)); j++)
+    { // ngecek di matriks MAPADJ(peta) bisa dicapai ga
+        if (ELEMENM(MAPADJ(peta), baris, j) == '1')
+        {
+            ELEMEN(dapatdicapai, kolom) = ELEMEN(MAPLOC(peta), j);
+            kolom++;
+            NEFF(dapatdicapai) += 1;
+        }
+    }
+    printf("%d\n", NEFF(dapatdicapai));
     for (i = 0; i < MAPROW(peta) + 2; i++)
     {
         for (j = 0; j < MAPCOL(peta) + 2; j++)
@@ -183,13 +209,55 @@ void displayMapColor(Map peta, Queue *urutan, Mobita *player)
     {
         for (j = 0; j < COLS(m); j++)
         {
-            if (i == Absis(POSISI(*player)) && j == Ordinat(POSISI(*player)))
-            {                                   //INI BERARTI LOKASI MOBITA
+            cetaknobita = 0;
+            cetaktodo = 0;
+            cetakprogress = 0;
+            cetakdicapai = 0;
+            if (i == Absis(POSISI(*player)) && j == Ordinat(POSISI(*player))) //INI BERARTI LOKASI MOBITA (WARNA KUNING)
+            {                                   
                 print_yellow(ELEMENM(m, i, j)); // harusnya pake while deh algoritma searching tapi mager
+                cetaknobita = 1;
             }
-            else
+            if (!isEmpty(INPROGRESS(*player)) && !cetaknobita)
             {
-                printf("%c", ELMT(m, i, j));
+                titik = NameToPoint(peta, TUJUAN(INFO(INPROGRESS(*player))));
+                if (i== Absis(titik) && j==Ordinat(titik)) {
+                    print_blue(ELEMENM(m, i, j));
+                    cetakprogress = 1;
+                }
+            }
+            if (!cetakprogress && !cetaknobita) 
+            {
+                p = TODO(*player);
+                while (p != NULL) 
+                {
+                    titik = NameToPoint(peta, ASAL(INFO(p)));
+                    if (i== Absis(titik) && j==Ordinat(titik)) 
+                    {
+                        cetaktodo = 1;
+                    }
+                    p = NEXT(p);
+                }
+                if (cetaktodo)
+                {
+                    print_red(ELEMENM(m, i, j));
+                }
+            }
+            for (k = 0; k < NEFF(dapatdicapai); k++)
+            {
+                if (Absis(LOCPOINT(ELEMEN(dapatdicapai, k))) == i && Ordinat(LOCPOINT(ELEMEN(dapatdicapai, k))) == j)
+                {
+                    cetakdicapai = 1;
+                    //TulisPOINT(LOCPOINT(ELEMEN(dapatdicapai,k)));
+                }
+            }    
+            if (!cetakprogress && !cetaknobita && !cetaktodo && cetakdicapai)
+            {
+                print_green(ELEMENM(m, i, j));
+            }
+            if (!cetakprogress && !cetaknobita && !cetakdicapai && !cetaktodo)
+            {
+                printf("%c", ELEMENM(m, i, j));
             }
         }
         printf("\n");

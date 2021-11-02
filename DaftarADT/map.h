@@ -41,5 +41,6 @@ void CreateLoc(char nama, int i, int j, Lokasi *tempat);
 void displayMap(Map peta);
 void konfigurasi();
 void cetakMatrix(Matrix M);
+POINT NameToPoint(Map peta, char nama);
 
 #endif
