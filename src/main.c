@@ -85,7 +85,8 @@ void pickUp(Map peta, Queue *urutan, Mobita *player)
         if (p != NULL && lokasiMobita == ASAL(INFO(p)))
         {
             exist = true;
-        } else 
+        }
+        else
         {
             p = NEXT(p);
             idx++;
@@ -105,6 +106,51 @@ void pickUp(Map peta, Queue *urutan, Mobita *player)
     {
         printf("Pesanan tidak ditemukan!");
     }
+}
+
+void dropOff(Map peta, Queue *urutan, Mobita *player)
+{
+    int i, x, y;
+    x = Absis(POSISI(*player));
+    y = Ordinat(POSISI(*player));
+
+    char lokasiMobita;
+    for (i = 0; i < NEFF(MAPLOC(peta)); i++)
+    {
+        if (x == Absis(LOCPOINT(ELEMEN(MAPLOC(peta), i))) && y == Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta), i))))
+        {
+            lokasiMobita = LOCNAME(ELEMEN(MAPLOC(peta), i));
+        }
+    }
+    Address p = INPROGRESS(*player);
+    printf("Nama lokasi mobita sekarang: %c\n", lokasiMobita);
+    if (p != NULL && lokasiMobita == TUJUAN(INFO(p)))
+    {
+        printf("Pesanan ");
+        displayJenis(&INFO(p));
+        printf(" berhasil diantarkan!\n");
+        if (JENIS(INFO(p)) == 'N')
+        {
+            printf("Uang yang didapatkan : 200 Yen.");
+            UANG(*player) += 200;
+        }
+        else if (JENIS(INFO(p)) == 'H')
+        {
+            printf("Uang yang didapatkan : 400 Yen.");
+            UANG(*player) += 400;
+        }
+        else if (JENIS(INFO(p)) == 'P')
+        {
+            printf("Uang yang didapatkan : 400 Yen.");
+            UANG(*player) += 400;
+        }
+        deleteFirst(&INPROGRESS(*player));
+    }
+    else
+    {
+        printf("Tidak ada pesanan yang dapat diantarkan!");
+    }
+    printf("\n");
 }
 
 void displayMapColor(Map peta, Queue *urutan, Mobita *player)
@@ -209,9 +255,10 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
     {
         pickUp(peta, urutan, player);
     }
-    /*else if (pilihan ==3 ) {
-
-    }*/
+    else if (pilihan == 3)
+    {
+        dropOff(peta, urutan, player);
+    }
     else if (pilihan == 4)
     {
         displayMapColor(peta, urutan, player);
