@@ -12,7 +12,7 @@ void createMobita(Mobita *m){
 
     // assign tiap properti objek
     INVENTORY(*m) = i;
-    UANG(*m) = 10000;
+    UANG(*m) = 0;
     WAKTU(*m) = -1;
     POSISI(*m) = p;
     TODO(*m) = NULL;

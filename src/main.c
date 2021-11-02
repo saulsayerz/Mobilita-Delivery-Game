@@ -160,10 +160,10 @@ void displayMapColor(Map peta, Queue *urutan, Mobita *player)
     COLS(m) = MAPCOL(peta) + 2;
     Address p;
     int cetaknobita, cetaktodo, cetakprogress, cetakdicapai;
-    int i, j, x, y,baris=0,kolom=0,k;
+    int i, j, x, y, baris = 0, kolom = 0, k;
     x = Absis(POSISI(*player)); // posisi sementara nobita
     y = Ordinat(POSISI(*player));
-    POINT titik = MakePOINT(0,0); 
+    POINT titik = MakePOINT(0, 0);
     ListDinamis dapatdicapai;
     CONTENTS(dapatdicapai) = (Lokasi *)malloc(26 * sizeof(Lokasi));
     NEFF(dapatdicapai) = 0;
@@ -214,25 +214,26 @@ void displayMapColor(Map peta, Queue *urutan, Mobita *player)
             cetakprogress = 0;
             cetakdicapai = 0;
             if (i == Absis(POSISI(*player)) && j == Ordinat(POSISI(*player))) //INI BERARTI LOKASI MOBITA (WARNA KUNING)
-            {                                   
+            {
                 print_yellow(ELEMENM(m, i, j)); // harusnya pake while deh algoritma searching tapi mager
                 cetaknobita = 1;
             }
             if (!isEmpty(INPROGRESS(*player)) && !cetaknobita)
             {
                 titik = NameToPoint(peta, TUJUAN(INFO(INPROGRESS(*player))));
-                if (i== Absis(titik) && j==Ordinat(titik)) {
+                if (i == Absis(titik) && j == Ordinat(titik))
+                {
                     print_blue(ELEMENM(m, i, j));
                     cetakprogress = 1;
                 }
             }
-            if (!cetakprogress && !cetaknobita) 
+            if (!cetakprogress && !cetaknobita)
             {
                 p = TODO(*player);
-                while (p != NULL) 
+                while (p != NULL)
                 {
                     titik = NameToPoint(peta, ASAL(INFO(p)));
-                    if (i== Absis(titik) && j==Ordinat(titik)) 
+                    if (i == Absis(titik) && j == Ordinat(titik))
                     {
                         cetaktodo = 1;
                     }
@@ -250,7 +251,7 @@ void displayMapColor(Map peta, Queue *urutan, Mobita *player)
                     cetakdicapai = 1;
                     //TulisPOINT(LOCPOINT(ELEMEN(dapatdicapai,k)));
                 }
-            }    
+            }
             if (!cetakprogress && !cetaknobita && !cetaktodo && cetakdicapai)
             {
                 print_green(ELEMENM(m, i, j));
@@ -264,44 +265,52 @@ void displayMapColor(Map peta, Queue *urutan, Mobita *player)
     }
 }
 
-void buyGadget(Mobita *player, Gadget *gadget)
+void buyGadget(Mobita *player, Gadget *gadget, Map *peta)
 {
-    int i;
-    printf("\n");
-    printf("Uang anda sekarang: %d Yen\n", UANG(*player));
-    printf("Gadget yang tersedia: \n");
-    for (i = 0; i < 5; i++)
+    POINT position = POSISI(*player);
+    POINT headQuarter = NameToPoint(*peta, '8');
+
+    if (EQ(position, headQuarter))
     {
-        printf("%d. ", (i + 1));
-        displayName(NAMAGADGET(*(gadget + i)));
-        printf("(%d Yen)", HARGAGADGET(*(gadget + i)));
+        int i;
         printf("\n");
-    }
-    printf("Gadget mana yang ingin kau beli? (ketik 0 jika ingin kembali)\n");
-    printf("ENTER COMMAND: ");
-    int choice;
-    scanf("%d", &choice);
-    if (choice)
-    {
-        Gadget wishlist = *(gadget + choice - 1);
-        if (UANG(*player) < HARGAGADGET(wishlist))
+        printf("Uang anda sekarang: %d Yen\n", UANG(*player));
+        printf("Gadget yang tersedia: \n");
+        for (i = 0; i < 5; i++)
         {
-            printf("Uang tidak cukup untuk membeli gadget, silahkan top up.\n");
+            printf("%d. ", (i + 1));
+            displayName(NAMAGADGET(*(gadget + i)));
+            printf("(%d Yen)", HARGAGADGET(*(gadget + i)));
+            printf("\n");
         }
-        else
+        printf("Gadget mana yang ingin kau beli? (ketik 0 jika ingin kembali)\n");
+        printf("ENTER COMMAND: ");
+        int choice;
+        scanf("%d", &choice);
+        if (choice)
         {
-            int success = addGadgetToInventory(&INVENTORY(*player), wishlist);
-            if (success)
+            Gadget wishlist = *(gadget + choice - 1);
+            if (UANG(*player) < HARGAGADGET(wishlist))
             {
-                useUang(player, HARGAGADGET(wishlist));
-                displayName(NAMAGADGET(wishlist));
-                printf("berhasil dibeli!\n");
-                printf("Uang anda sekarang: %d Yen", UANG(*player));
+                printf("Uang tidak cukup untuk membeli gadget, silahkan top up.\n");
             }
-            
+            else
+            {
+                int success = addGadgetToInventory(&INVENTORY(*player), wishlist);
+                if (success)
+                {
+                    useUang(player, HARGAGADGET(wishlist));
+                    displayName(NAMAGADGET(wishlist));
+                    printf("berhasil dibeli!\n");
+                    printf("Uang anda sekarang: %d Yen\n", UANG(*player));
+                }
+            }
         }
     }
-    printf("\n");
+    else
+    {
+        printf("Pembelian gadget hanya dapat dilakukan di headquarters.\n");
+    }
 }
 
 void help()
@@ -350,7 +359,7 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
     }
     else if (pilihan == 7)
     {
-        buyGadget(player, gadget);
+        buyGadget(player, gadget, &peta);
     }
     else if (pilihan == 9)
     {
