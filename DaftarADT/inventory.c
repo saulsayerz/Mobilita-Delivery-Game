@@ -63,7 +63,7 @@ void takeGadgetFromInventory(Inventory *i, int idx, Gadget *g)
  * Add gadget to inventory
  * Menambahkan ke kosong pertama
  **/
-void addGadgetToInventory(Inventory *i, Gadget g)
+int addGadgetToInventory(Inventory *i, Gadget g)
 {
     // dapatkan gadget undef pertama
     int idx = 0;
@@ -73,7 +73,9 @@ void addGadgetToInventory(Inventory *i, Gadget g)
 
     if (idx >= INVENTORYCAPACITY){
         printf("Inventory tidak cukup untuk menyimpan gadget");
+        return 0;
     } else {
         setGadgetFromInventoryOnIDX(i, idx, g);
+        return 1;
     }
 }

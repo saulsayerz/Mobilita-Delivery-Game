@@ -215,13 +215,22 @@ void buyGadget(Mobita *player, Gadget *gadget)
     scanf("%d", &choice);
     if (choice)
     {
-        if (UANG(*player) < HARGAGADGET(*(gadget + choice + 1)))
+        Gadget wishlist = *(gadget + choice - 1);
+        if (UANG(*player) < HARGAGADGET(wishlist))
         {
-            printf("Uang tidak cukup untuk membeli gadget, silahkan top up\n");
+            printf("Uang tidak cukup untuk membeli gadget, silahkan top up.\n");
         }
         else
         {
-            // Berhasil geming
+            int success = addGadgetToInventory(&INVENTORY(*player), wishlist);
+            if (success)
+            {
+                useUang(player, HARGAGADGET(wishlist));
+                displayName(NAMAGADGET(wishlist));
+                printf("berhasil dibeli!\n");
+                printf("Uang anda sekarang: %d Yen", UANG(*player));
+            }
+            
         }
     }
     printf("\n");
