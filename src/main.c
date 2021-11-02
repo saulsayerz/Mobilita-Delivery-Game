@@ -104,7 +104,7 @@ void pickUp(Map peta, Queue *urutan, Mobita *player)
     }
     else
     {
-        printf("Pesanan tidak ditemukan!");
+        printf("Pesanan tidak ditemukan!\n");
     }
 }
 
@@ -184,7 +184,7 @@ void displayMapColor(Map peta, Queue *urutan, Mobita *player)
             NEFF(dapatdicapai) += 1;
         }
     }
-    printf("%d\n", NEFF(dapatdicapai));
+    // printf("%d\n", NEFF(dapatdicapai));
     for (i = 0; i < MAPROW(peta) + 2; i++)
     {
         for (j = 0; j < MAPCOL(peta) + 2; j++)
@@ -328,6 +328,74 @@ void help()
     //harus ada yang ngeconvert Queue ke todolist dan inprogress berarti, mungkin diambil 5 6 juga soalnya mudah kan display doang
 }
 
+void saveGame(Mobita *player)
+{
+    // MALES PAKE MESINNNNNNN, NTAR AJA
+    char name[20];
+    printf("Masukkan nama save file: ");
+    scanf("%s", &name);
+
+    FILE *original, *copy;
+    int c;
+    original = fopen("test.txt", "r");
+    copy = fopen(name, "w");
+    if (!original || !copy)
+    {
+        puts("File error!");
+    }
+    while ((c = fgetc(original)) != EOF)
+        fputc(c, copy);
+
+    fclose(original);
+    fclose(copy);
+
+    copy = fopen(name, "a");
+
+    fprintf(copy, "\n%d", UANG(*player));
+    fprintf(copy, "\n%d", WAKTU(*player) - 1);
+    fprintf(copy, "\n%d %d", Absis(POSISI(*player)), Ordinat(POSISI(*player)));
+
+    Gadget *gadget = INVENTORY(*player).listGadget;
+    int id[INVENTORYCAPACITY];
+    int total[INVENTORYCAPACITY];
+
+    for (int i = 0; i < INVENTORYCAPACITY; i++)
+    {
+        id[i] = -1;
+        total[i] = 0;
+    }
+
+    for (int i = 0; i < INVENTORYCAPACITY; i++)
+    {
+        Gadget currentGadget = *(gadget + i);
+        if (!isGadgetUNDEF(currentGadget))
+        {
+            id[IDGADGET(currentGadget)] = IDGADGET(currentGadget);
+            total[IDGADGET(currentGadget)]++;
+        }
+    }
+
+    int lenInventory = 0;
+    for (int i = 0; i < INVENTORYCAPACITY; i++)
+    {
+        if (id[i] != -1)
+        {
+            lenInventory++;
+        }
+    }
+
+    fprintf(copy, "\n%d", lenInventory);
+    for (int i = 0; i < INVENTORYCAPACITY; i++)
+    {
+        if (id[i] != -1)
+        {
+            fprintf(copy, "\n%d %d", id[i], total[i]);
+        }
+    }
+
+    fclose(copy);
+}
+
 void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
 {
     int pilihan;
@@ -365,6 +433,28 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
     {
         help();
     }
+    else if (pilihan == 10)
+    {
+        char choice;
+        int exit;
+        printf("Peringatan! Ability yang sedang aktif akan hilang.\n0 untuk membatalkan: ");
+        scanf("%d", &exit);
+
+        if (exit)
+        {
+            printf("Apakah ingin menyimpan state saat ini? (Y/N) - default(N): ");
+            scanf(" %c", &choice);
+            if (choice == 'Y' || choice == 'y')
+            {
+                saveGame(player);
+            }
+            else
+            {
+                printf("Terimakasih telah bermain\n");
+            }
+            return;
+        }
+    }
     else
     {
         printf("Pilihan yang dimasukkan salah. Silahkan masukkan opsi lain\n");
@@ -388,31 +478,43 @@ int main()
     DaftarPesanan daftar;
     Mobita player;
     Queue urutan;
-    Gadget gadgets[5];
+    Gadget gadgets[INVENTORYCAPACITY];
     CreateMap(&peta);
-    printf("Selamat datang di game TUBES K2 Kelompok 6\nketik 1 untuk new game\nketik 2 untuk exit\nmasukkan opsi: ");
+    printf("Selamat datang di game TUBES K2 Kelompok 6\nketik 1 untuk new game\nketik 2 untuk load game\nketik 3 untuk exit\nmasukkan opsi: ");
     scanf("%d", &opsi);
-    if (opsi == 1)
+    if (opsi == 1 || opsi == 2)
     {
-        konfigurasi(&peta, &daftar); // ngebaca txt file ke program
-        printf("Konfigurasi permainan berhasil\n");
         createMobita(&player);
+        if (opsi == 1)
+        {
+            konfigurasi(&peta, &daftar); // ngebaca txt file ke program
+            printf("Konfigurasi permainan berhasil\n");
+            int x = Absis(LOCPOINT(ELEMEN(MAPLOC(peta), 0))); // 0 adalah headquarter
+            int y = Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta), 0)));
+            changePosisi(&player, x, y); // Mengubah koordinat awal nobita menjadi headquarter
+        }
+        else
+        {
+            char name[20];
+            printf("Masukkan nama save file: ");
+            scanf("%s", &name);
+            loadGame(&peta, &daftar, &player, name);
+            printf("Load game berhasil\n");
+        }
+
         sortPesanan(&daftar);
         CreateQueue(&urutan);
         for (i = 0; i < NEFF(daftar); i++)
         {
             enqueue(&urutan, ELEMEN(daftar, i));
         }
-        int x = Absis(LOCPOINT(ELEMEN(MAPLOC(peta), 0))); // 0 adalah headquarter
-        int y = Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta), 0)));
-        changePosisi(&player, x, y); // Mengubah koordinat awal nobita menjadi headquarter
         help();
         int j = 0;
-        gadgets[0] = newGadget("Kain Pembungkus Waktu", 800);
-        gadgets[1] = newGadget("Senter Pembesar", 1200);
-        gadgets[2] = newGadget("Pintu Kemana Saja", 1500);
-        gadgets[3] = newGadget("Mesin Waktu", 3000);
-        gadgets[4] = newGadget("Senter Pengecil", 800);
+        gadgets[0] = newGadget(0, "Kain Pembungkus Waktu", 800);
+        gadgets[1] = newGadget(1, "Senter Pembesar", 1200);
+        gadgets[2] = newGadget(2, "Pintu Kemana Saja", 1500);
+        gadgets[3] = newGadget(3, "Mesin Waktu", 3000);
+        gadgets[4] = newGadget(4, "Senter Pengecil", 800);
         pilihCommand(peta, &urutan, &player, gadgets);
     }
     return 0;

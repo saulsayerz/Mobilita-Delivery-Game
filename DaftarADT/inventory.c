@@ -72,7 +72,7 @@ int addGadgetToInventory(Inventory *i, Gadget g)
     }
 
     if (idx >= INVENTORYCAPACITY){
-        printf("Inventory tidak cukup untuk menyimpan gadget");
+        printf("Inventory tidak cukup untuk menyimpan gadget\n");
         return 0;
     } else {
         setGadgetFromInventoryOnIDX(i, idx, g);

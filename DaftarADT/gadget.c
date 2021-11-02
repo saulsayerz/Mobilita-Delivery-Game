@@ -4,6 +4,7 @@
  * Menginisialisasi gadget
  **/
 void createGadget(Gadget *g){
+    IDGADGET(*g) = IDGADGETUNDEF;
     NAMAGADGET(*g) = NAMAGADGETUNDEF;
     HARGAGADGET(*g) = HARGAGADGETUNDEF;
 }
@@ -15,10 +16,11 @@ boolean isGadgetUNDEF(Gadget g){
     return NAMAGADGET(g) == NAMAGADGETUNDEF && HARGAGADGET(g) == HARGAGADGETUNDEF;
 }
 
-Gadget newGadget(char nama[], int harga)
+Gadget newGadget(int id, char nama[], int harga)
 {
     Gadget g;
     createGadget(&g);
+    IDGADGET(g) = id;
     NAMAGADGET(g) = nama;
     HARGAGADGET(g) = harga;
     return g;
