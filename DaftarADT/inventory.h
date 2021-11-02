@@ -41,7 +41,7 @@ void takeGadgetFromInventory(Inventory *i, int idx, Gadget *g);
  * Add gadget to inventory
  * Menambahkan ke kosong pertama
  **/
-void addGadgetToInventory(Inventory *i, Gadget g);
+int addGadgetToInventory(Inventory *i, Gadget g);
 
 /**
  * Apakah inventory penuh?
