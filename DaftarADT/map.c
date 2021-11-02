@@ -150,3 +150,17 @@ void cetakMatrix(Matrix m){
         printf("\n");
 	}
 }
+
+POINT NameToPoint(Map peta, char nama)
+{   
+    int i;
+    POINT hasil;
+    for (i = 0; i < NEFF(MAPLOC(peta)); i++) //harusnya searching pake while tapi mager
+    {
+        if (LOCNAME(ELEMEN(MAPLOC(peta), i)) == nama)
+        {
+            hasil = LOCPOINT(ELEMEN(MAPLOC(peta), i));
+        }
+    }
+    return hasil;
+}
