@@ -53,11 +53,16 @@ void deleteGadgetFromInvetoryOnIDX(Inventory *i, int idx)
 /**
  * Take gadget of idx
  * return the gadget
+ * it cover the case if the gadget is undef
  **/
 void takeGadgetFromInventory(Inventory *i, int idx, Gadget *g)
 {
-    *g = GADGETINIDX(*i, idx);
-    deleteGadgetFromInvetoryOnIDX(i, idx);   
+    if(isGadgetUNDEF(GADGETINIDX(*i, idx))){
+        // DONT DO ANYTHING
+    } else {
+        *g = GADGETINIDX(*i, idx);
+        deleteGadgetFromInvetoryOnIDX(i, idx);  
+    } 
 }
 /**
  * Add gadget to inventory

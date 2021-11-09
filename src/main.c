@@ -181,6 +181,42 @@ void buyGadget(Mobita *player, Gadget *gadget)
     printf("\n");
 }
 
+void inventoryCommand(Mobita *player){
+    // deklarasi
+    int choice;
+    int gadgetIdx;
+    boolean isChoiceValid;
+    Gadget gadgetUsed;
+    createGadget(&gadgetUsed);
+    
+    // tampilkan inventory
+    displayInventory(INVENTORY(*player));
+    
+    // tanya gadget yang ingin digunakan
+    printf("Gadget mana yang ingin digunakan? (ketik 0 jika ingin kembali)\n");
+    printf("ENTER COMMAND: ");
+    scanf("%d", &choice);
+
+    // pemrosesan pilihan
+    isChoiceValid = (choice > 0 && choice <= INVENTORYCAPACITY);
+    if (choice && isChoiceValid){
+        gadgetIdx = choice - 1;
+        takeGadgetFromInventory(
+            &INVENTORY(*player), 
+            gadgetIdx, 
+            &gadgetUsed);
+
+        // cek apakah gadget yang diambil undef
+        if (isGadgetUNDEF(gadgetUsed)){
+            printf("Tidak ada Gadget yang dapat digunakan!\n");
+        } else {
+            useGadget(player, gadgetUsed);
+        }
+    } else if (choice && choice == 0) {
+        
+    }
+}
+
 void help()
 {
     printf("1. MOVE\n");                // samuel udah

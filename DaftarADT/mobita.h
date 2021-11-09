@@ -2,6 +2,7 @@
 #define MOBITA_H
 #include "todo.h"
 #include "inventory.h"
+#include "tas.h"
 #include "./ADTPrimitif/point.h"
 
 typedef struct mobita
@@ -12,6 +13,7 @@ typedef struct mobita
     POINT posisi;
     List toDoList;
     List inProgress;
+    Tas tas;
 } Mobita;
 
 #define INVENTORY(m) (m).inventory
@@ -20,7 +22,7 @@ typedef struct mobita
 #define POSISI(m) (m).posisi
 #define TODO(m) (m).toDoList
 #define INPROGRESS(m) (m).inProgress
-
+#define TAS(m) (m).tas
 /**
  * Inisialisasi Mobita
  **/

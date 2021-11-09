@@ -1,5 +1,4 @@
 #include "gadget.h"
-
 /**
  * Menginisialisasi gadget
  **/
@@ -33,4 +32,25 @@ void displayName(char *nama)
         i++;
     }
     printf(" ");
+}
+
+/**
+ * Menggunakan gadget untuk memberikan efek
+ */
+void useGadget(Mobita *player, Gadget g){
+    Tas* tas = &TAS(*player);
+    int newMaxItem;
+    if (g.nama == "Kain Pembungkus Waktu"){
+        
+    } else if (g.nama == "Pintu Kemana Saja"){
+        
+    } else if (g.nama == "Senter Pembesar"){
+        setMaxItem(tas, getMaxItem(tas)*2);
+    } else if (g.nama == "Senter Pengecil"){
+
+    } else if (g.nama == "Mesin Waktu"){
+        
+    } else {
+        printf("Gadget belum bisa dipakai");
+    }
 }

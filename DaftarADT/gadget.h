@@ -1,7 +1,7 @@
 #ifndef GADGET_H
 #define GADGET_H
 #include "boolean.h"
-
+#include "mobita.h"
 #define NAMAGADGETUNDEF "GADGETUNDEF"
 #define HARGAGADGETUNDEF -999
 
@@ -27,5 +27,10 @@ boolean isGadgetUNDEF(Gadget g);
 Gadget newGadget(char *nama, int harga);
 
 void displayName(char *nama);
+
+/**
+ * Menggunakan gadget untuk memberikan efek
+ */
+void useGadget(Mobita *player, Gadget g);
 
 #endif
