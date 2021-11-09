@@ -78,9 +78,8 @@ void changePosisi(Mobita *m, int absis, int ordinat){
     int heavy = checkHeavy(m);
     if (heavy != 0){
         int i;
-        addOneToWaktu(m);
         for(i = 0;i<heavy;i++){
-            addOneToWaktu(m);
+            addTwoToWaktu(m);
         }
     } else {
         addOneToWaktu(m);
