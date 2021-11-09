@@ -5,6 +5,7 @@
 #include "./ADTPrimitif/matrix.h"
 #include "./ADTPrimitif/point.h"
 #include "pesanan.h"
+#include "mobita.h"
 
 typedef struct
 {
@@ -40,6 +41,8 @@ void CreateMap(Map *peta);
 void CreateLoc(char nama, int i, int j, Lokasi *tempat);
 void displayMap(Map peta);
 void konfigurasi();
+void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name);
 void cetakMatrix(Matrix M);
+POINT NameToPoint(Map peta, char nama);
 
 #endif

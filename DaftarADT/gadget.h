@@ -2,15 +2,19 @@
 #define GADGET_H
 #include "boolean.h"
 #include "mobita.h"
+
+#define IDGADGETUNDEF -1
 #define NAMAGADGETUNDEF "GADGETUNDEF"
 #define HARGAGADGETUNDEF -999
 
 typedef struct gadget
 {
+    int id;
     char *nama;
     int harga;
 } Gadget;
 
+#define IDGADGET(g) (g).id
 #define NAMAGADGET(g) (g).nama
 #define HARGAGADGET(g) (g).harga
 
@@ -24,7 +28,7 @@ void createGadget(Gadget *g);
  **/
 boolean isGadgetUNDEF(Gadget g);
 
-Gadget newGadget(char *nama, int harga);
+Gadget newGadget(int id, char *nama, int harga);
 
 void displayName(char *nama);
 
