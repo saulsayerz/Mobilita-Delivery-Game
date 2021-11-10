@@ -4,6 +4,7 @@
 #include "inventory.h"
 #include "tas.h"
 #include "./ADTPrimitif/point.h"
+#include "effect_list.h"
 
 typedef struct mobita
 {    
@@ -23,7 +24,7 @@ typedef struct mobita
 #define POSISI(m) (m).posisi
 #define TODO(m) (m).toDoList
 #define INPROGRESS(m) (m).inProgress
-#define TAS(m) (m).tas
+#define TAS_MOBITA(m) (m).tas
 #define EFEK(m) (m).efek
 /**
  * Inisialisasi Mobita
@@ -58,6 +59,7 @@ int checkHeavy(Mobita *m);
  **/
 void changePosisi(Mobita *m, int absis, int ordinat);
 
+void useGadget(Mobita *player, Gadget g);
 
 
 #endif

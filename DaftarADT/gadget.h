@@ -35,6 +35,5 @@ void displayName(char *nama);
 /**
  * Menggunakan gadget untuk memberikan efek
  */
-void useGadget(Mobita *player, Gadget g);
 
 #endif

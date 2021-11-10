@@ -2,9 +2,9 @@
 #define EFFECT_LIST_H
 #define EFFECT_LIST_CAPACITY 50 
 #include "boolean.h"
-typedef char* ElType;
+typedef char* ElTypeEffectlist;
 typedef struct effectList {
-    ElType effect[EFFECT_LIST_CAPACITY];
+    ElTypeEffectlist effect[EFFECT_LIST_CAPACITY];
     int NEff;
 } EffectList;
 
@@ -16,9 +16,9 @@ typedef struct effectList {
 #define KAIN_PEMBUNGKUS_WAKTU "Kain Pembungkus Waktu"
 
 void createEffectList(EffectList *L);
-void addEffect(EffectList *L, ElType e);
-void removeEffect(EffectList *L, ElType e);
-boolean isEffectExist(EffectList L, ElType e);
+void addEffect(EffectList *L, ElTypeEffectlist e);
+void removeEffect(EffectList *L, ElTypeEffectlist e);
+boolean isEffectExist(EffectList L, ElTypeEffectlist e);
 
 
 #endif

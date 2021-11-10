@@ -22,7 +22,7 @@ boolean isTasFull(Tas t)
 {
     return (IDX_TOP_TAS(t) == MAX_ITEM(t)-1);
 }
-void setMaxTas(Tas *t, int max)
+void setMaxItem(Tas *t, int max)
 {
     if(max > CAPACITY_TAS){
         MAX_ITEM(*t) = CAPACITY_TAS;

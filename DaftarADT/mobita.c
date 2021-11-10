@@ -5,10 +5,12 @@
  **/
 void createMobita(Mobita *m){
     Inventory i;
-
+    EffectList l;
+    Tas t;
     // inisialisasi objek anak
     POINT p = MakePOINT(0, 0);
     createInventory(&i);
+    createEffectList(&l);
 
     // assign tiap properti objek
     INVENTORY(*m) = i;
@@ -17,6 +19,8 @@ void createMobita(Mobita *m){
     POSISI(*m) = p;
     TODO(*m) = NULL;
     INPROGRESS(*m) = NULL;
+    EFEK(*m) = l;
+    TAS_MOBITA(*m) = t;
 }
 
 /**
@@ -40,6 +44,7 @@ void decrementWaktu(Mobita *m, int n){
         WAKTU(*m) = 0;
     } else {
         WAKTU(*m) = newWaktu;
+    }
 }
 
 /**
@@ -87,7 +92,7 @@ void changePosisi(Mobita *m, int absis, int ordinat){
     EffectList efek = EFEK(*m);    
     boolean senterPembesarEffect = 
         isEffectExist(efek, SENTER_PENGECIL)
-        && JENIS(TOP_TAS(TAS(*m))) == 'H';
+        && JENIS(TOP_TAS(TAS_MOBITA(*m))) == 'H';
     boolean pintuKemanaSajaEffect = isEffectExist(efek, PINTU_KEMANA_SAJA);
 
     int heavy = checkHeavy(m);
@@ -106,6 +111,37 @@ void changePosisi(Mobita *m, int absis, int ordinat){
     }
 
     if(pintuKemanaSajaEffect){
-        printf("Kamu berpindah menggunakan pintu ke mana saja, ")
-    };
+        printf("Kamu berpindah dengan instan!\n");
+    }
+}
+
+/**
+ * Menggunakan gadget untuk memberikan efek
+ */
+void useGadget(Mobita *player, Gadget g){
+    Tas* tas = &TAS_MOBITA(*player);
+    int newMaxItem;
+    Item itemTmp;
+    
+    // definisi
+    char HEAVY = 'H';
+
+    if (g.nama == "Kain Pembungkus Waktu"){
+        addEffect(&EFEK(*player), KAIN_PEMBUNGKUS_WAKTU);
+    } else if (g.nama == "Pintu Kemana Saja"){
+        addEffect(&EFEK(*player), PINTU_KEMANA_SAJA);
+    } else if (g.nama == "Senter Pembesar"){
+        setMaxItem(tas, MAX_ITEM(*tas)*2);
+    } else if (g.nama == "Senter Pengecil"){
+        itemTmp = TOP_TAS(*tas);
+        if (JENIS(itemTmp) != HEAVY){
+            printf("Item teratas tas bukan item heavy, yakin?\n");
+        } else {
+            addEffect(&EFEK(*player),SENTER_PENGECIL);
+        }
+    } else if (g.nama == "Mesin Waktu"){
+        decrementWaktu(player, 50);
+    } else {
+        printf("Gadget belum bisa dipakai");
+    }
 }

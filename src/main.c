@@ -8,6 +8,8 @@
 #include "../DaftarADT/ADTPrimitif/Queue.c"
 #include "../DaftarADT/todo.c"
 #include "../DaftarADT/node.c"
+#include "../DaftarADT/effect_list.c"
+#include "../DaftarADT/tas.c"
 
 void move(Map peta, Queue *urutan, Mobita *player)
 {
@@ -153,8 +155,8 @@ void dropOff(Map peta, Queue *urutan, Mobita *player)
         deleteFirst(&INPROGRESS(*player));
 
         // menghapus efek senter pengecil setelah dropoff
-        if (isEffectExist(EFEK(*player), SENTER_PENGECIL){
-            removeEffect(SENTER_PENGECIL);
+        if (isEffectExist(EFEK(*player), SENTER_PENGECIL)){
+            removeEffect(&EFEK(*player),SENTER_PENGECIL);
         }
     }
     else
@@ -475,6 +477,10 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
     else if (pilihan == 7)
     {
         buyGadget(player, gadget, &peta);
+    }
+    else if (pilihan == 8)
+    {
+        inventoryCommand(player);
     }
     else if (pilihan == 9)
     {

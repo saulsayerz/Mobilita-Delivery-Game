@@ -27,7 +27,8 @@ void displayInventory(Inventory i){
         if (isGadgetUNDEF(temp)){
             printf("-\n");
         } else {
-            printf(NAMAGADGET(temp),"\n");
+            printf(NAMAGADGET(temp));
+            printf("\n");
         }
         idx++;
     }
