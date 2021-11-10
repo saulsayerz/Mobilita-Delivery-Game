@@ -19,6 +19,10 @@ void move(Map peta, Queue *urutan, Mobita *player)
     CONTENTS(dapatdicapai) = (Lokasi *)malloc(26 * sizeof(Lokasi));
     NEFF(dapatdicapai) = 0;
     KAPASITAS(dapatdicapai) = 26;
+    boolean efekPintuKemanaSaja = isEffectExist(EFEK(*player), PINTU_KEMANA_SAJA);
+    if (efekPintuKemanaSaja){
+        printf("Kamu menggunakan gadget Pintu Kemana Saja!, kamu bisa pergi kemana pun secara instan!\n");
+    }
     for (i = 0; i < NEFF(MAPLOC(peta)); i++)
     { // searching barisnya
         if (x == Absis(LOCPOINT(ELEMEN(MAPLOC(peta), i))) && y == Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta), i))))
@@ -26,9 +30,10 @@ void move(Map peta, Queue *urutan, Mobita *player)
             baris = i; // harusnya pake while deh algoritma searching tapi mager
         }
     }
+
     for (j = 0; j < NEFF(MAPLOC(peta)); j++)
     { // ngecek di matriks MAPADJ(peta) bisa dicapai ga
-        if (ELEMENM(MAPADJ(peta), baris, j) == '1')
+        if (ELEMENM(MAPADJ(peta), baris, j) == '1' || efekPintuKemanaSaja)
         {
             ELEMEN(dapatdicapai, kolom) = ELEMEN(MAPLOC(peta), j);
             kolom++;
@@ -57,6 +62,7 @@ void move(Map peta, Queue *urutan, Mobita *player)
         x = Absis(LOCPOINT(ELEMEN(dapatdicapai, pilihan - 1)));
         y = Ordinat(LOCPOINT(ELEMEN(dapatdicapai, pilihan - 1)));
         changePosisi(player, x, y);
+        removeEffect(&EFEK(*player), PINTU_KEMANA_SAJA);
         printf("Waktu : %d\n", WAKTU(*player));
         printf("Mobita sekarang berada di titik %c (%d,%d)!\n", LOCNAME(ELEMEN(dapatdicapai, pilihan - 1)), x, y);
     }

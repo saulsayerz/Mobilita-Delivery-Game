@@ -1,6 +1,6 @@
 #include "gadget.h"
 #include "effect_list.h"
-
+#include "mobita.h"
 
 void createGadget(Gadget *g){
     IDGADGET(*g) = IDGADGETUNDEF;
@@ -48,9 +48,8 @@ void useGadget(Mobita *player, Gadget g){
         //perishable item return
         addEffect(&EFEK(*player), KAIN_PEMBUNGKUS_WAKTU);
     } else if (g.nama == "Pintu Kemana Saja"){
-        // di move, kalau efek ini ada, maka cost waktu tidak perlu
-        // efek dihilangkan tepat setelah digunakan, harus ada pengecekan di akhir
-        // ISSUE: dia harusnya bisa ke segala titik.
+        // DONE: di move, kalau efek ini ada, maka cost waktu tidak perlu
+        // DONE: efek dihilangkan tepat setelah digunakan, harus ada pengecekan di akhir
         addEffect(player, PINTU_KEMANA_SAJA);
     } else if (g.nama == "Senter Pembesar"){
         setMaxItem(tas, getMaxItem(tas)*2);
@@ -78,7 +77,6 @@ void useGadget(Mobita *player, Gadget g){
         // jika iya, berarti harus ada trackernya dong
 
         decrementWaktu(player, 50);
-
     } else {
         printf("Gadget belum bisa dipakai");
     }
