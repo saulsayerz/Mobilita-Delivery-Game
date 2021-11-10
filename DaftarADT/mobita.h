@@ -14,6 +14,7 @@ typedef struct mobita
     List toDoList;
     List inProgress;
     Tas tas;
+    EffectList efek;
 } Mobita;
 
 #define INVENTORY(m) (m).inventory
@@ -23,6 +24,7 @@ typedef struct mobita
 #define TODO(m) (m).toDoList
 #define INPROGRESS(m) (m).inProgress
 #define TAS(m) (m).tas
+#define EFEK(m) (m).efek
 /**
  * Inisialisasi Mobita
  **/
@@ -32,6 +34,9 @@ void createMobita(Mobita *m);
  * Menambahkan satu unit ke waktu
  **/
 void addOneToWaktu(Mobita *m);
+
+// kurangi waktu sebanyak n
+void decrementWaktu(Mobita *m, int n);
 
 /**
  * Mengurangi uang
@@ -52,7 +57,6 @@ int checkHeavy(Mobita *m);
  * Mengubah posisi
  **/
 void changePosisi(Mobita *m, int absis, int ordinat);
-
 
 
 

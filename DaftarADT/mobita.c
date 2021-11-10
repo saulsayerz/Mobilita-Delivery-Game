@@ -1,5 +1,5 @@
 #include "mobita.h"
-
+#include "effect_list.h"
 /**
  * Inisialisasi Mobita
  **/
@@ -31,6 +31,15 @@ void addOneToWaktu(Mobita *m){
  **/
 void addTwoToWaktu(Mobita *m){
     WAKTU(*m) += 2;
+}
+
+// decrement waktu
+void decrementWaktu(Mobita *m, int n){
+    int newWaktu = WAKTU(*m) - n;
+    if(newWaktu < 0){
+        WAKTU(*m) = 0;
+    } else {
+        WAKTU(*m) = newWaktu;
 }
 
 /**
@@ -75,14 +84,28 @@ void changePosisi(Mobita *m, int absis, int ordinat){
     Ordinat(POSISI(*m)) = ordinat;
     Absis(POSISI(*m)) = absis;
 
+    EffectList efek = EFEK(*m);    
+    boolean senterPembesarEffect = 
+        isEffectExist(efek, SENTER_PENGECIL)
+        && JENIS(TOP_TAS(TAS(*m))) == 'H';
+    boolean pintuKemanaSajaEffect = isEffectExist(efek, PINTU_KEMANA_SAJA);
+
     int heavy = checkHeavy(m);
-    if (heavy != 0){
+    if (heavy != 0 && !pintuKemanaSajaEffect){
         int i;
         addOneToWaktu(m);
         for(i = 0;i<heavy;i++){
             addOneToWaktu(m);
         }
-    } else {
+    } else if (!pintuKemanaSajaEffect) {
         addOneToWaktu(m);
     }
+
+    if (heavy != 0 && senterPembesarEffect){
+        decrementWaktu(m, 1);
+    }
+
+    if(pintuKemanaSajaEffect){
+        printf("Kamu berpindah menggunakan pintu ke mana saja, ")
+    };
 }

@@ -145,6 +145,11 @@ void dropOff(Map peta, Queue *urutan, Mobita *player)
             UANG(*player) += 400;
         }
         deleteFirst(&INPROGRESS(*player));
+
+        // menghapus efek senter pengecil setelah dropoff
+        if (isEffectExist(EFEK(*player), SENTER_PENGECIL){
+            removeEffect(SENTER_PENGECIL);
+        }
     }
     else
     {
