@@ -65,23 +65,6 @@ void enqueue(Queue *q, Pesanan val){
         menjadi rata kiri untuk membuat ruang kosong bagi TAIL baru  */
 
 void dequeue(Queue *q, Pesanan *val){
-    /*int awal = IDX_HEAD(*q);
-    int i;
-    Pesanan nilai ;
-    *val = HEAD(*q);
-    if (length(*q) == 1) {
-        CreateQueue(q) ;
-    }
-    else{
-        for (i = awal+1;i < length(*q) + awal; i++){
-            IDX_HEAD(*q) = i;
-            nilai = HEAD(*q) ;
-            IDX_HEAD(*q) -= 1;
-            HEAD(*q) = nilai;
-        }
-    }
-    IDX_TAIL(*q) -= 1;
-    IDX_HEAD(*q) = awal;*/
     *val = HEAD(*q);
     if (lengthQueue(*q) == 1) {
         CreateQueue(q) ;
@@ -117,14 +100,3 @@ void displayQueue(Queue q){
 /* Contoh : jika ada tiga elemen bernilai 1, 20, 30 akan dicetak: [1,20,30] */
 /* Jika Queue kosong : menulis [] */
 }
-
-/*int main() {
-    Queue q;
-    CreateQueue(&q);
-    IDX_HEAD(q) = 5;
-    IDX_TAIL(q) = 7;
-    q.buffer[5] = 1;
-    q.buffer[6] = 2;
-    q.buffer[7] = 3;
-    displayQueue(q);
-}*/

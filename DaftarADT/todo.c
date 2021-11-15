@@ -174,7 +174,7 @@ void displayInProgress(List l){
         {
             printf("%d. ", i);
             displayJenis(&info);
-            printf(" (Tujuan : %c)", info.tujuan);
+            printf(" (Tujuan : %c)\n", info.tujuan);
             alamat = NEXT(alamat);
             info = INFO(alamat);
             i++;

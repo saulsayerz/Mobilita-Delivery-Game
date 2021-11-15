@@ -550,12 +550,14 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
         printf("Pilihan yang dimasukkan salah. Silahkan masukkan opsi lain\n");
     }
 
-    int j = 0;
-    while (WAKTUPESANAN(HEAD(*urutan)) <= WAKTU(*player))
+    for (int i = 0; i < lengthQueue(*urutan); i++)
     {
-        ElType val;
-        dequeue(urutan, &val);
-        insertFirst(&TODO(*player), val);
+        if (WAKTUPESANAN(HEAD(*urutan)) == WAKTU(*player))
+        {
+            ElType val;
+            dequeue(urutan, &val);
+            insertFirst(&TODO(*player), val);
+        }
     }
 
     pilihCommand(peta, urutan, player, gadget);
