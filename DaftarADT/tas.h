@@ -11,11 +11,13 @@ typedef struct tas {
     ElTypeTas buffer[CAPACITY_TAS];
     int idxTopTas;
     int maxItem;
+    int uppermostPerishableInitialTime;
 } Tas;
 
 #define IDX_TOP_TAS(t) (t).idxTopTas
 #define     TOP_TAS(t) (t).buffer[(t).idxTopTas]
 #define     MAX_ITEM(t) (t).maxItem
+#define    UPPERMOST_PERISHABLE_INITIAL_TIME(t) (t).uppermostPerishableInitialTime
 
 void createTas(Tas *t);
 void pushTas(Tas *t, ElTypeTas e);
@@ -23,7 +25,9 @@ void popTas(Tas *t, ElTypeTas *e);
 boolean isTasEmpty(Tas t);
 boolean isTasFull(Tas t);
 void setMaxItem(Tas *t, int max);
-
+void decreasePerishableTimeInTas(Tas *t);
+void setUppermostPerishableInitialTime(Tas *t, int time);
+void resetMostRecentlyPerishableTimeInTas(Tas *t);
 #endif
 
 

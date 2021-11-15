@@ -60,6 +60,6 @@ int checkHeavy(Mobita *m);
 void changePosisi(Mobita *m, int absis, int ordinat);
 
 void useGadget(Mobita *player, Gadget g);
-
+void decreasePerishableTime(Mobita *m);
 
 #endif

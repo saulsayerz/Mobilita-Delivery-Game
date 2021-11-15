@@ -3,7 +3,10 @@
 /**
  * Inisialisasi Mobita
  **/
-void createMobita(Mobita *m){
+int speedBoostCounter;
+
+void createMobita(Mobita *m)
+{
     Inventory i;
     EffectList l;
     Tas t;
@@ -11,7 +14,7 @@ void createMobita(Mobita *m){
     POINT p = MakePOINT(0, 0);
     createInventory(&i);
     createEffectList(&l);
-
+    createTas(&t);
     // assign tiap properti objek
     INVENTORY(*m) = i;
     UANG(*m) = 10000;
@@ -26,23 +29,29 @@ void createMobita(Mobita *m){
 /**
  * Menambahkan satu unit ke waktu
  **/
-void addOneToWaktu(Mobita *m){
+void addOneToWaktu(Mobita *m)
+{
     WAKTU(*m) += 1;
 }
 
 /**
  * Menambahkan dua unit ke waktu
  **/
-void addTwoToWaktu(Mobita *m){
+void addTwoToWaktu(Mobita *m)
+{
     WAKTU(*m) += 2;
 }
 
 // decrement waktu
-void decrementWaktu(Mobita *m, int n){
+void decrementWaktu(Mobita *m, int n)
+{
     int newWaktu = WAKTU(*m) - n;
-    if(newWaktu < 0){
+    if (newWaktu < 0)
+    {
         WAKTU(*m) = 0;
-    } else {
+    }
+    else
+    {
         WAKTU(*m) = newWaktu;
     }
 }
@@ -51,10 +60,14 @@ void decrementWaktu(Mobita *m, int n){
  * Mengurangi uang
  * Jika uang kurang, print "Uang tidak cukup untuk membeli gadget!"
  **/
-void useUang(Mobita *m, int jumlah){
-    if (UANG(*m) - jumlah < 0){
+void useUang(Mobita *m, int jumlah)
+{
+    if (UANG(*m) - jumlah < 0)
+    {
         printf("Uang tidak cukup untuk membeli gadget!\n");
-    } else {
+    }
+    else
+    {
         UANG(*m) -= jumlah;
     }
 }
@@ -62,18 +75,22 @@ void useUang(Mobita *m, int jumlah){
 /**
  * Menambahkan uang
  **/
-void addUang(Mobita *m, int jumlah){
+void addUang(Mobita *m, int jumlah)
+{
     UANG(*m) += jumlah;
 }
 
 /**
  * Mengecek apakah jumlah item heavy pada inprogress
  **/
-int checkHeavy(Mobita *m){
+int checkHeavy(Mobita *m)
+{
     int jumlahHeavy = 0;
     Address p = INPROGRESS(*m);
-    while (p != NULL) {
-        if (JENIS(INFO(p)) == 'H'){
+    while (p != NULL)
+    {
+        if (JENIS(INFO(p)) == 'H')
+        {
             jumlahHeavy++;
         }
         p = NEXT(p);
@@ -81,67 +98,170 @@ int checkHeavy(Mobita *m){
     return jumlahHeavy;
 }
 
+void removeItemFromTasAndInProgress(Mobita *m)
+{
+    deleteFirst(&INPROGRESS(*m));
+    Pesanan garbage;
+    popTas(&TAS_MOBITA(*m), &garbage);
+};
 
-/**
- * Mengubah posisi
- **/
-void changePosisi(Mobita *m, int absis, int ordinat){
-    Ordinat(POSISI(*m)) = ordinat;
-    Absis(POSISI(*m)) = absis;
+void addItemToTasAndInProgress(Mobita *m, Pesanan p)
+{
+    pushTas(&TAS_MOBITA(*m), p);
+    insertFirst(&INPROGRESS(*m), p);
+};
 
-    EffectList efek = EFEK(*m);    
-    boolean senterPembesarEffect = 
-        isEffectExist(efek, SENTER_PENGECIL)
-        && JENIS(TOP_TAS(TAS_MOBITA(*m))) == 'H';
-    boolean pintuKemanaSajaEffect = isEffectExist(efek, PINTU_KEMANA_SAJA);
+void decreasePerishableTime(Mobita *m)
+{
+    Address p = INPROGRESS(*m);
+    int i = 0;
+    while (p != NULL)
+    {
+        if (JENIS(INFO(p)) == 'P' && PERISH(INFO(p)) > 0)
+        {
+            PERISH(INFO(p)) -= 1;
+        }
 
-    int heavy = checkHeavy(m);
-    if (heavy != 0 && !pintuKemanaSajaEffect){
+        if (JENIS(INFO(p)) == 'P' && PERISH(INFO(p)) == 0)
+        {
+            deleteAt(&INPROGRESS(*m), i);
+        }
+        p = NEXT(p);
+        i++;
+    }
+
+    decreasePerishableTimeInTas(&TAS_MOBITA(*m));
+}
+
+void resetMostRecentlyPerishableTime(Mobita *m)
+{
+    int resetValue = UPPERMOST_PERISHABLE_INITIAL_TIME(TAS_MOBITA(*m));
+    if (resetValue == -1)
+    {
+        // UDAH
+    }
+    else
+    {
+        Address p = INPROGRESS(*m);
+        while (JENIS(INFO(p)) == 'P')
+        {
+            p = NEXT(p);
+        }
+
+        if (JENIS(INFO(p)) == 'P')
+        {
+            PERISH(INFO(p)) = resetValue;
+        }
+
+        resetMostRecentlyPerishableTimeInTas(&TAS_MOBITA(*m));
+    }
+}
+
+void effectHandlerChangePosisi(Mobita *m, int heavy, boolean pintuKemanaSajaEffect, boolean speedBoostEffect, boolean senterPembesarEffect)
+{
+
+    if (heavy != 0 && !pintuKemanaSajaEffect)
+    {
         int i;
         addOneToWaktu(m);
-        for(i = 0;i<heavy;i++){
+        for (i = 0; i < heavy; i++)
+        {
             addOneToWaktu(m);
         }
-    } else if (!pintuKemanaSajaEffect) {
+        decreasePerishableTime(m);
+    }
+    else if (!pintuKemanaSajaEffect && speedBoostEffect)
+    {
+        speedBoostCounter += 1;
+        if (speedBoostCounter % 2 == 0)
+        {
+            addOneToWaktu(m);
+        }
+
+        if (speedBoostCounter == 10)
+        {
+            speedBoostCounter = 0;
+            removeEffect(&EFEK(*m), SPEED_BOOST);
+        }
+    }
+    else if (!pintuKemanaSajaEffect)
+    {
         addOneToWaktu(m);
     }
 
-    if (heavy != 0 && senterPembesarEffect){
+    if (heavy != 0 && senterPembesarEffect)
+    {
         decrementWaktu(m, 1);
     }
 
-    if(pintuKemanaSajaEffect){
+    if (pintuKemanaSajaEffect)
+    {
         printf("Kamu berpindah dengan instan!\n");
     }
 }
 
 /**
+ * Mengubah posisi
+ **/
+void changePosisi(Mobita *m, int absis, int ordinat)
+{
+    Ordinat(POSISI(*m)) = ordinat;
+    Absis(POSISI(*m)) = absis;
+
+    EffectList efek = EFEK(*m);
+    boolean senterPembesarEffect =
+        isEffectExist(efek, SENTER_PENGECIL) && JENIS(TOP_TAS(TAS_MOBITA(*m))) == 'H';
+    boolean pintuKemanaSajaEffect = isEffectExist(efek, PINTU_KEMANA_SAJA);
+    boolean speedBoostEffect = isEffectExist(efek, SPEED_BOOST);
+
+    int heavy = checkHeavy(m);
+    effectHandlerChangePosisi(m, heavy, pintuKemanaSajaEffect, speedBoostEffect, senterPembesarEffect);
+}
+
+/**
  * Menggunakan gadget untuk memberikan efek
  */
-void useGadget(Mobita *player, Gadget g){
-    Tas* tas = &TAS_MOBITA(*player);
+void useGadget(Mobita *player, Gadget g)
+{
+    Tas *tas = &TAS_MOBITA(*player);
     int newMaxItem;
     Item itemTmp;
-    
+
     // definisi
     char HEAVY = 'H';
 
-    if (g.nama == "Kain Pembungkus Waktu"){
-        addEffect(&EFEK(*player), KAIN_PEMBUNGKUS_WAKTU);
-    } else if (g.nama == "Pintu Kemana Saja"){
+    if (g.nama == "Kain Pembungkus Waktu")
+    {
+    }
+    else if (g.nama == "Pintu Kemana Saja")
+    {
+        printf("Kamu memakai Pintu Kemana Saja, di MOVE selanjutnya, kamu bisa berpindah dengan instan!\n");
         addEffect(&EFEK(*player), PINTU_KEMANA_SAJA);
-    } else if (g.nama == "Senter Pembesar"){
-        setMaxItem(tas, MAX_ITEM(*tas)*2);
-    } else if (g.nama == "Senter Pengecil"){
+    }
+    else if (g.nama == "Senter Pembesar")
+    {
+        printf("Kamu memakai Senter Pembesar, TAS kamu membesar dua kali lipat!\n");
+        setMaxItem(tas, MAX_ITEM(*tas) * 2);
+    }
+    else if (g.nama == "Senter Pengecil")
+    {
         itemTmp = TOP_TAS(*tas);
-        if (JENIS(itemTmp) != HEAVY){
-            printf("Item teratas tas bukan item heavy, yakin?\n");
-        } else {
-            addEffect(&EFEK(*player),SENTER_PENGECIL);
+        if (JENIS(itemTmp) != HEAVY)
+        {
+            printf("Item teratas tas bukan item heavy, kamu gaakan pakai ini karena tidak akan berefek!\n");
         }
-    } else if (g.nama == "Mesin Waktu"){
+        else
+        {
+            printf("Kamu memakai Senter Pengecil, di bagian atas tas itu item heavy, efek buruknya dia gaakaan ngaruh ke kamu!");
+            addEffect(&EFEK(*player), SENTER_PENGECIL);
+        }
+    }
+    else if (g.nama == "Mesin Waktu")
+    {
         decrementWaktu(player, 50);
-    } else {
+    }
+    else
+    {
         printf("Gadget belum bisa dipakai");
     }
 }

@@ -2,6 +2,7 @@
 #define EFFECT_LIST_H
 #define EFFECT_LIST_CAPACITY 50 
 #include "boolean.h"
+
 typedef char* ElTypeEffectlist;
 typedef struct effectList {
     ElTypeEffectlist effect[EFFECT_LIST_CAPACITY];
@@ -14,7 +15,10 @@ typedef struct effectList {
 #define SENTER_PENGECIL "Senter Pengecil"
 #define PINTU_KEMANA_SAJA "Pintu Kemana Saja"
 #define KAIN_PEMBUNGKUS_WAKTU "Kain Pembungkus Waktu"
+#define SPEED_BOOST "Speed Boost"
+#define INCREASE_CAPACITY "Increase Capacity"
 
+extern int speedBoostCounter;
 void createEffectList(EffectList *L);
 void addEffect(EffectList *L, ElTypeEffectlist e);
 void removeEffect(EffectList *L, ElTypeEffectlist e);

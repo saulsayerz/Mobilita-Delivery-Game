@@ -11,6 +11,8 @@
 #include "../DaftarADT/effect_list.c"
 #include "../DaftarADT/tas.c"
 
+// define global variables
+
 void move(Map peta, Queue *urutan, Mobita *player)
 {
     printf("POSISI YANG DAPAT DICAPAI\n");
@@ -22,7 +24,8 @@ void move(Map peta, Queue *urutan, Mobita *player)
     NEFF(dapatdicapai) = 0;
     KAPASITAS(dapatdicapai) = 26;
     boolean efekPintuKemanaSaja = isEffectExist(EFEK(*player), PINTU_KEMANA_SAJA);
-    if (efekPintuKemanaSaja){
+    if (efekPintuKemanaSaja)
+    {
         printf("Kamu menggunakan gadget Pintu Kemana Saja!, kamu bisa pergi kemana pun secara instan!\n");
     }
     for (i = 0; i < NEFF(MAPLOC(peta)); i++)
@@ -101,18 +104,32 @@ void pickUp(Map peta, Queue *urutan, Mobita *player)
         }
     }
 
-    if (exist)
+    if (exist && !isTasFull(TAS_MOBITA(*player)))
     {
+        if (JENIS(INFO(p)) == 'H' && isEffectExist(EFEK(*player), SPEED_BOOST))
+        {
+            printf("Kamu baru saja mempickup item heavy, ability SPEED BOOST mu hilang :(");
+            removeEffect(
+                &EFEK(*player),
+                SPEED_BOOST);
+        } 
+        
+        if (JENIS(INFO(p)) == 'P'){
+            setUppermostPerishableInitialTime(&TAS_MOBITA(*player), PERISH(INFO(p)));
+        }
         printf("Pesanan berupa ");
         displayJenis(&INFO(p));
         printf(" berhasil diambil!!\n");
         printf("Tujuan Pesanan: %c\n", TUJUAN(INFO(p)));
-        insertFirst(&INPROGRESS(*player), INFO(p));
+        addItemToTasAndInProgress(player, INFO(p));
         deleteAt(&TODO(*player), idx);
     }
-    else
+    else if (!exist)
     {
         printf("Pesanan tidak ditemukan!\n");
+    } else if (isTasFull(TAS_MOBITA(*player)))
+    {
+        printf("Tas mu penuh!\n");
     }
 }
 
@@ -144,19 +161,33 @@ void dropOff(Map peta, Queue *urutan, Mobita *player)
         }
         else if (JENIS(INFO(p)) == 'H')
         {
-            printf("Uang yang didapatkan : 400 Yen.");
+            printf("Uang yang didapatkan : 400 Yen.\n");
             UANG(*player) += 400;
+            if (checkHeavy(player) > 1)
+            {
+                printf("Kamu masih memiliki item Heavy lain dalam tas, tidak dapat ability SPEED BOOST!!\n");
+            }
+            else
+            {
+                addEffect(&EFEK(*player), SPEED_BOOST);
+                printf("Mendapat ability: SPEED BOOST!");
+                speedBoostCounter = 0;
+            }
         }
         else if (JENIS(INFO(p)) == 'P')
         {
             printf("Uang yang didapatkan : 400 Yen.");
             UANG(*player) += 400;
+            setMaxItem(&TAS_MOBITA(*player), MAX_ITEM(TAS_MOBITA(*player)) + 1);
+            setUppermostPerishableInitialTime(&TAS_MOBITA(*player), PERISH(INFO(p)));
+            printf("Mendapat ability: INCREASE CAPACITY!");
         }
-        deleteFirst(&INPROGRESS(*player));
-
+        removeItemFromTasAndInProgress(player);
+        
         // menghapus efek senter pengecil setelah dropoff
-        if (isEffectExist(EFEK(*player), SENTER_PENGECIL)){
-            removeEffect(&EFEK(*player),SENTER_PENGECIL);
+        if (isEffectExist(EFEK(*player), SENTER_PENGECIL))
+        {
+            removeEffect(&EFEK(*player), SENTER_PENGECIL);
         }
     }
     else
@@ -326,17 +357,18 @@ void buyGadget(Mobita *player, Gadget *gadget, Map *peta)
     }
 }
 
-void inventoryCommand(Mobita *player){
+void inventoryCommand(Mobita *player)
+{
     // deklarasi
     int choice;
     int gadgetIdx;
     boolean isChoiceValid;
     Gadget gadgetUsed;
     createGadget(&gadgetUsed);
-    
+
     // tampilkan inventory
     displayInventory(INVENTORY(*player));
-    
+
     // tanya gadget yang ingin digunakan
     printf("Gadget mana yang ingin digunakan? (ketik 0 jika ingin kembali)\n");
     printf("ENTER COMMAND: ");
@@ -344,21 +376,26 @@ void inventoryCommand(Mobita *player){
 
     // pemrosesan pilihan
     isChoiceValid = (choice > 0 && choice <= INVENTORYCAPACITY);
-    if (choice && isChoiceValid){
+    if (choice && isChoiceValid)
+    {
         gadgetIdx = choice - 1;
         takeGadgetFromInventory(
-            &INVENTORY(*player), 
-            gadgetIdx, 
+            &INVENTORY(*player),
+            gadgetIdx,
             &gadgetUsed);
 
         // cek apakah gadget yang diambil undef
-        if (isGadgetUNDEF(gadgetUsed)){
+        if (isGadgetUNDEF(gadgetUsed))
+        {
             printf("Tidak ada Gadget yang dapat digunakan!\n");
-        } else {
+        }
+        else
+        {
             useGadget(player, gadgetUsed);
         }
-    } else if (choice && choice == 0) {
-        
+    }
+    else if (choice && choice == 0)
+    {
     }
 }
 
