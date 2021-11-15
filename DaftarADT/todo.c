@@ -119,7 +119,7 @@ void displayJenis(Pesanan *p)
         break;
     
     case 'P':
-        printf("Perishable Item, sisa waktu %d", WAKTUPESANAN(*p));
+        printf("Perishable Item, sisa waktu %d", PERISH(*p));
 
     default:
         break;

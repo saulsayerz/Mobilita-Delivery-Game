@@ -23,4 +23,4 @@ test: main
 .PHONY: clean all
 
 clean:
-	-rm *.o
+	-del *.o

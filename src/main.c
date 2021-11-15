@@ -12,6 +12,8 @@
 #include "../DaftarADT/tas.c"
 
 // define global variables
+int pesananBerhasil = 0;
+int sisaPesanan = 0;
 
 void move(Map peta, Queue *urutan, Mobita *player)
 {
@@ -156,7 +158,7 @@ void dropOff(Map peta, Queue *urutan, Mobita *player)
         printf(" berhasil diantarkan!\n");
         if (JENIS(INFO(p)) == 'N')
         {
-            printf("Uang yang didapatkan : 200 Yen.");
+            printf("Uang yang didapatkan : 200 Yen.\n");
             UANG(*player) += 200;
         }
         else if (JENIS(INFO(p)) == 'H')
@@ -170,17 +172,17 @@ void dropOff(Map peta, Queue *urutan, Mobita *player)
             else
             {
                 addEffect(&EFEK(*player), SPEED_BOOST);
-                printf("Mendapat ability: SPEED BOOST!");
+                printf("Mendapat ability: SPEED BOOST!\n");
                 speedBoostCounter = 0;
             }
         }
         else if (JENIS(INFO(p)) == 'P')
         {
-            printf("Uang yang didapatkan : 400 Yen.");
+            printf("Uang yang didapatkan : 400 Yen.\n");
             UANG(*player) += 400;
             setMaxItem(&TAS_MOBITA(*player), MAX_ITEM(TAS_MOBITA(*player)) + 1);
             setUppermostPerishableInitialTime(&TAS_MOBITA(*player), PERISH(INFO(p)));
-            printf("Mendapat ability: INCREASE CAPACITY!");
+            printf("Mendapat ability: INCREASE CAPACITY!\n");
         }
         removeItemFromTasAndInProgress(player);
         
@@ -189,11 +191,17 @@ void dropOff(Map peta, Queue *urutan, Mobita *player)
         {
             removeEffect(&EFEK(*player), SENTER_PENGECIL);
         }
+
+        pesananBerhasil++;
+        sisaPesanan--;
     }
     else
     {
         printf("Tidak ada pesanan yang dapat diantarkan!");
     }
+
+    // Cek Finish Game
+    
     printf("\n");
 }
 
@@ -293,7 +301,6 @@ void displayMapColor(Map peta, Queue *urutan, Mobita *player)
                 if (Absis(LOCPOINT(ELEMEN(dapatdicapai, k))) == i && Ordinat(LOCPOINT(ELEMEN(dapatdicapai, k))) == j)
                 {
                     cetakdicapai = 1;
-                    //TulisPOINT(LOCPOINT(ELEMEN(dapatdicapai,k)));
                 }
             }
             if (!cetakprogress && !cetaknobita && !cetaktodo && cetakdicapai)
@@ -336,7 +343,7 @@ void buyGadget(Mobita *player, Gadget *gadget, Map *peta)
             Gadget wishlist = *(gadget + choice - 1);
             if (UANG(*player) < HARGAGADGET(wishlist))
             {
-                printf("Uang tidak cukup untuk membeli gadget, silahkan top up.\n");
+                printf("Uang tidak cukup untuk membeli gadget.\n");
             }
             else
             {
@@ -396,20 +403,21 @@ void inventoryCommand(Mobita *player)
     }
     else if (choice && choice == 0)
     {
+        printf("Pilihan salah\n");
     }
 }
 
 void help()
 {
-    printf("1. MOVE\n");                // samuel udah
-    printf("2. PICK UP\n");             // samuel udah
-    printf("3. DROP OFF\n");            // samuel
-    printf("4. DISPLAY MAP\n");         // saul
-    printf("5. DISPLAY TO DO LIST\n");  // lewiss udah
-    printf("6. DISPLAY IN PROGRESS\n"); // lewiss udah
-    printf("7. BUY\n");                 //jova
-    printf("8. INVENTORY\n");           //ave mungkin
-    printf("9. HELP\n");                //udah
+    printf("1. MOVE\n");      
+    printf("2. PICK UP\n");            
+    printf("3. DROP OFF\n");           
+    printf("4. DISPLAY MAP\n");         
+    printf("5. DISPLAY TO DO LIST\n"); 
+    printf("6. DISPLAY IN PROGRESS\n");
+    printf("7. BUY\n");      
+    printf("8. INVENTORY\n");   
+    printf("9. HELP\n");   
     printf("10. EXIT GAME\n");
     //harus ada yang ngeconvert Queue ke todolist dan inprogress berarti, mungkin diambil 5 6 juga soalnya mudah kan display doang
 }
@@ -600,6 +608,7 @@ int main()
         {
             enqueue(&urutan, ELEMEN(daftar, i));
         }
+        sisaPesanan = lengthQueue(urutan);
         help();
         int j = 0;
         gadgets[0] = newGadget(0, "Kain Pembungkus Waktu", 800);
@@ -611,7 +620,3 @@ int main()
     }
     return 0;
 }
-
-// Queue [9 elemen], dequeue --> [8elemen]
-// in progress sama to do list linked list [kosong] [kosong]
-// to do list [1 elemen todolist] [kosong]

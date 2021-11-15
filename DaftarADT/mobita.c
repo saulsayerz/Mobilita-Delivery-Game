@@ -125,6 +125,7 @@ void decreasePerishableTime(Mobita *m)
         if (JENIS(INFO(p)) == 'P' && PERISH(INFO(p)) == 0)
         {
             deleteAt(&INPROGRESS(*m), i);
+            printf("Pesanan hangus\n");
         }
         p = NEXT(p);
         i++;
@@ -187,6 +188,7 @@ void effectHandlerChangePosisi(Mobita *m, int heavy, boolean pintuKemanaSajaEffe
     else if (!pintuKemanaSajaEffect)
     {
         addOneToWaktu(m);
+        decreasePerishableTime(m);
     }
 
     if (heavy != 0 && senterPembesarEffect)
