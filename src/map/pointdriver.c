@@ -1,8 +1,3 @@
-//Nama : Saul Sayers
-//NIM  : 13520094 / 16520075
-//Kelas: K02
-//PRA-PRAKTIKUM 2
-
 #include <stdio.h>
 
 typedef struct TES {int x; int y;} point ;

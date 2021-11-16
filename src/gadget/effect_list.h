@@ -2,6 +2,7 @@
 #define EFFECT_LIST_H
 #define EFFECT_LIST_CAPACITY 50 
 #include "../boolean.h"
+#include "../mesin/wordmachine.h"
 
 typedef char* ElTypeEffectlist;
 typedef struct effectList {

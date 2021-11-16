@@ -23,6 +23,12 @@ void start(char filename[]) {
 	adv();
 }
 
+void startInput()
+{
+       tape = stdin;
+       adv();
+}
+
 void adv() {
 /* Pita dimajukan satu karakter. 
    I.S. : Karakter pada jendela = currentChar, currentChar != MARK

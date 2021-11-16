@@ -7,6 +7,7 @@
 #include "../map/point.h"
 #include "../gadget/effect_list.h"
 #include "../gadget/gadget.h"
+#include "../mesin/wordmachine.h"
 
 typedef struct mobita
 {    

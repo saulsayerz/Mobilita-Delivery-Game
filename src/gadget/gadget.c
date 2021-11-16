@@ -1,6 +1,5 @@
 #include "gadget.h"
 #include <stdio.h>
-#include <string.h>
 
 void createGadget(Gadget *g){
     IDGADGET(*g) = IDGADGETUNDEF;
@@ -9,7 +8,7 @@ void createGadget(Gadget *g){
 }
 
 boolean isGadgetUNDEF(Gadget g){
-    return (strcmp(NAMAGADGET(g), NAMAGADGETUNDEF) == 0) && HARGAGADGET(g) == HARGAGADGETUNDEF;
+    return !strings_not_equal_v2(NAMAGADGET(g), NAMAGADGETUNDEF) && HARGAGADGET(g) == HARGAGADGETUNDEF;
 }
 
 Gadget newGadget(int id, char nama[], int harga)
@@ -24,13 +23,7 @@ Gadget newGadget(int id, char nama[], int harga)
 
 void displayName(char *nama)
 {
-    int i = 0;
-    while ((*(nama + i) >= 65 && *(nama + i) <=122) || *(nama + i) == 32)
-    {
-        printf("%c", *(nama + i));
-        i++;
-    }
-    printf(" ");
+    printf("%s", nama);
 }
 
 

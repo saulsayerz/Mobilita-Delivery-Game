@@ -1,8 +1,3 @@
-//Nama : Saul Sayers
-//NIM  : 13520094
-//Kelas: K02 Alstrukdat
-//PRA-PRAKTIKUM 5
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "matrix.h"

@@ -7,6 +7,7 @@
 
 // define global variables
 int pesananBerhasil = 0;
+char* fileKonfig = "konfigurasi.txt";
 
 void move(Map peta, Queue *urutan, Mobita *player)
 {
@@ -47,11 +48,13 @@ void move(Map peta, Queue *urutan, Mobita *player)
     printf("Posisi yang dipilih? (ketik 0 jika ingin kembali)\n");
     int pilihan;
     printf("ENTER COMMAND: ");
-    scanf("%d", &pilihan);
+    startInputWord();
+    pilihan = kataToInt(currentWord);
     while (pilihan < 0 || pilihan > NEFF(dapatdicapai))
     {
         printf("Input salah! Masukkan ulang command\nCOMMAND: ");
-        scanf("%d", &pilihan);
+        startInputWord();
+        pilihan = kataToInt(currentWord);
     }
     if (pilihan == 0)
     {
@@ -193,7 +196,6 @@ void dropOff(Map peta, Queue *urutan, Mobita *player)
         }
 
         pesananBerhasil++;
-        // sisaPesanan--;
     }
     else
     {
@@ -204,7 +206,7 @@ void dropOff(Map peta, Queue *urutan, Mobita *player)
 }
 
 void displayMapColor(Map peta, Queue *urutan, Mobita *player)
-{ //INI BELUM JADIII
+{
     Matrix m;
     ROWS(m) = MAPROW(peta) + 2;
     COLS(m) = MAPCOL(peta) + 2;
@@ -234,7 +236,6 @@ void displayMapColor(Map peta, Queue *urutan, Mobita *player)
             NEFF(dapatdicapai) += 1;
         }
     }
-    // printf("%d\n", NEFF(dapatdicapai));
     for (i = 0; i < MAPROW(peta) + 2; i++)
     {
         for (j = 0; j < MAPCOL(peta) + 2; j++)
@@ -335,7 +336,8 @@ void buyGadget(Mobita *player, Gadget *gadget, Map *peta)
         printf("Gadget mana yang ingin kau beli? (ketik 0 jika ingin kembali)\n");
         printf("ENTER COMMAND: ");
         int choice;
-        scanf("%d", &choice);
+        startInputWord();
+        choice = kataToInt(currentWord);
         if (choice)
         {
             Gadget wishlist = *(gadget + choice - 1);
@@ -377,7 +379,8 @@ void inventoryCommand(Mobita *player)
     // tanya gadget yang ingin digunakan
     printf("Gadget mana yang ingin digunakan? (ketik 0 jika ingin kembali)\n");
     printf("ENTER COMMAND: ");
-    scanf("%d", &choice);
+    startInputWord();
+    choice = kataToInt(currentWord);
 
     // pemrosesan pilihan
     isChoiceValid = (choice > 0 && choice <= INVENTORYCAPACITY);
@@ -408,28 +411,26 @@ void inventoryCommand(Mobita *player)
 void help()
 {
     printf("1. MOVE\n");
-    printf("2. PICK UP\n");
-    printf("3. DROP OFF\n");
-    printf("4. DISPLAY MAP\n");
-    printf("5. DISPLAY TO DO LIST\n");
-    printf("6. DISPLAY IN PROGRESS\n");
+    printf("2. PICKUP\n");
+    printf("3. DROPOFF\n");
+    printf("4. MAP\n");
+    printf("5. TODO\n");
+    printf("6. INPROGRESS\n");
     printf("7. BUY\n");
     printf("8. INVENTORY\n");
     printf("9. HELP\n");
-    printf("10. EXIT GAME\n");
-    //harus ada yang ngeconvert Queue ke todolist dan inprogress berarti, mungkin diambil 5 6 juga soalnya mudah kan display doang
+    printf("10.EXIT\n");
 }
 
 void saveGame(Mobita *player, Queue *urutan)
 {
-    // MALES PAKE MESINNNNNNN, NTAR AJA
-    char name[20];
+    char *name;
     printf("Masukkan nama save file: ");
-    scanf("%s", &name);
-
+    startInputWord();
+    name = currentWord.contents;
     FILE *original, *copy;
     int c;
-    original = fopen("test.txt", "r");
+    original = fopen(fileKonfig, "r");
     copy = fopen(name, "w");
     if (!original || !copy)
     {
@@ -543,7 +544,7 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
 {
     for (int i = 0; i < lengthQueue(*urutan); i++)
     {
-        if (WAKTUPESANAN(HEAD(*urutan)) >= WAKTU(*player))
+        if (WAKTUPESANAN(HEAD(*urutan)) <= WAKTU(*player))
         {
             ElType val;
             dequeue(urutan, &val);
@@ -551,57 +552,61 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
         }
     }
     
-    int pilihan;
     printf("Silahkan pilih command: ");
-    scanf("%d", &pilihan);
-    if (pilihan == 1)
+    Word pilihan;
+    startInputWord();
+    pilihan = currentWord;
+    if (!strings_not_equal(pilihan, "MOVE"))
     {
         move(peta, urutan, player);
     }
-    else if (pilihan == 2)
+    else if (!strings_not_equal(pilihan, "PICKUP"))
     {
         pickUp(peta, urutan, player);
     }
-    else if (pilihan == 3)
+    else if (!strings_not_equal(pilihan, "DROPOFF"))
     {
         dropOff(peta, urutan, player);
     }
-    else if (pilihan == 4)
+    else if (!strings_not_equal(pilihan, "MAP"))
     {
         displayMapColor(peta, urutan, player);
     }
-    else if (pilihan == 5)
+    else if (!strings_not_equal(pilihan, "TODO"))
     {
         displayTodo(TODO(*player));
     }
-    else if (pilihan == 6)
+    else if (!strings_not_equal(pilihan, "INPROGRESS"))
     {
         displayInProgress(INPROGRESS(*player));
     }
-    else if (pilihan == 7)
+    else if (!strings_not_equal(pilihan, "BUY"))
     {
         buyGadget(player, gadget, &peta);
     }
-    else if (pilihan == 8)
+    else if (!strings_not_equal(pilihan, "INVENTORY"))
     {
         inventoryCommand(player);
     }
-    else if (pilihan == 9)
+    else if (!strings_not_equal(pilihan, "HELP"))
     {
         help();
     }
-    else if (pilihan == 10)
+    else if (!strings_not_equal(pilihan, "EXIT"))
     {
-        char choice;
+        Word choice;
         int exit;
-        printf("Peringatan! Ability yang sedang aktif akan hilang.\n0 untuk membatalkan: ");
-        scanf("%d", &exit);
+        printf("Peringatan! Ability yang sedang aktif akan hilang.\n1 Lanjut, 0 batal\n");
+        printf("Masukkan pilihan: ");
+        startInputWord();
+        exit = kataToInt(currentWord);
 
         if (exit)
         {
             printf("Apakah ingin menyimpan state saat ini? (Y/N) - default(N): ");
-            scanf(" %c", &choice);
-            if (choice == 'Y' || choice == 'y')
+            startInputWord();
+            choice = currentWord;
+            if (!strings_not_equal(choice, "Y") || !strings_not_equal(choice, "y"))
             {
                 saveGame(player, urutan);
             }
@@ -617,22 +622,24 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
         printf("Pilihan yang dimasukkan salah. Silahkan masukkan opsi lain\n");
     }
 
-    // if (sisaPesanan == 0)
-    // {
-    //     POINT position = POSISI(*player);
-    //     POINT headQuarter = NameToPoint(peta, '8');
+    int sisaPesanan = length(TODO(*player)) + length(INPROGRESS(*player)) + lengthQueue(*urutan);
 
-    //     if (EQ(position, headQuarter))
-    //     {
-    //         printf("Congratulations!!!\n");
-    //         printf("Semua pesanan telah diselesaikan\n");
-    //         printf("Total pesanan berhasil: %d\n", pesananBerhasil);
-    //         printf("Total uang terkumpul: %d\n", UANG(*player));
-    //         printf("RESPECT+++\n");
-    //         printf("Terimakasih telah bermain!!!\n");
-    //         return;
-    //     }
-    // }
+    if (sisaPesanan == 0)
+    {
+        POINT position = POSISI(*player);
+        POINT headQuarter = NameToPoint(peta, '8');
+
+        if (EQ(position, headQuarter))
+        {
+            printf("Congratulations!!!\n");
+            printf("Semua pesanan telah diselesaikan\n");
+            printf("Total pesanan berhasil: %d\n", pesananBerhasil);
+            printf("Total uang terkumpul: %d\n", UANG(*player));
+            printf("RESPECT+++\n");
+            printf("Terimakasih telah bermain!!!\n");
+            return;
+        }
+    }
 
     pilihCommand(peta, urutan, player, gadget);
 }
@@ -647,18 +654,19 @@ int main()
     Gadget gadgets[INVENTORYCAPACITY];
     CreateMap(&peta);
     printf("Selamat datang di game TUBES K2 Kelompok 6\nketik 1 untuk new game\nketik 2 untuk load game\nketik 3 untuk exit\nmasukkan opsi: ");
-    scanf("%d", &opsi);
+    startInputWord();
+    opsi = kataToInt(currentWord);
     if (opsi == 1 || opsi == 2)
     {
         createMobita(&player);
-        gadgets[0] = newGadget(0, "Kain Pembungkus Waktu", 800);
-        gadgets[1] = newGadget(1, "Senter Pembesar", 1200);
-        gadgets[2] = newGadget(2, "Pintu Kemana Saja", 1500);
-        gadgets[3] = newGadget(3, "Mesin Waktu", 3000);
-        gadgets[4] = newGadget(4, "Senter Pengecil", 800);
+        gadgets[0] = newGadget(0, KAIN_PEMBUNGKUS_WAKTU, 800);
+        gadgets[1] = newGadget(1, SENTER_PEMBESAR, 1200);
+        gadgets[2] = newGadget(2, PINTU_KEMANA_SAJA, 1500);
+        gadgets[3] = newGadget(3, MESIN_WAKTU, 3000);
+        gadgets[4] = newGadget(4, SENTER_PENGECIL, 800);
         if (opsi == 1)
         {
-            konfigurasi(&peta, &daftar); // ngebaca txt file ke program
+            konfigurasi(&peta, &daftar, fileKonfig); // ngebaca txt file ke program
             printf("Konfigurasi permainan berhasil\n");
             int x = Absis(LOCPOINT(ELEMEN(MAPLOC(peta), 0))); // 0 adalah headquarter
             int y = Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta), 0)));
@@ -666,9 +674,10 @@ int main()
         }
         else
         {
-            char name[20];
+            char *name;
             printf("Masukkan nama save file: ");
-            scanf("%s", &name);
+            startInputWord();
+            name = currentWord.contents;
             loadGame(&peta, &daftar, &player, name, gadgets);
             printf("Load game berhasil\n");
         }

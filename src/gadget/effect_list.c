@@ -14,7 +14,7 @@ void addEffect(EffectList *L, ElTypeEffectlist e){
 }
 void removeEffect(EffectList *L, ElTypeEffectlist e){
     int i = 0;
-    while (i < NEFF_EFFECT_LIST(*L) && EFFECT_LIST_ELMT(*L, i) != e){
+    while (i < NEFF_EFFECT_LIST(*L) && strings_not_equal_v2(EFFECT_LIST_ELMT(*L, i), e)){
         i++;
     }
 
@@ -28,7 +28,7 @@ void removeEffect(EffectList *L, ElTypeEffectlist e){
 }
 boolean isEffectExist(EffectList L, ElTypeEffectlist e){
     int i = 0;
-    while (i < NEFF_EFFECT_LIST(L) && EFFECT_LIST_ELMT(L, i) != e){
+    while (i < NEFF_EFFECT_LIST(L) && strings_not_equal_v2(EFFECT_LIST_ELMT(L, i), e)){
         i++;
     }
     return i < NEFF_EFFECT_LIST(L);
