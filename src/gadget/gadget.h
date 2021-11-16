@@ -1,7 +1,6 @@
 #ifndef GADGET_H
 #define GADGET_H
-#include "boolean.h"
-#include "mobita.h"
+#include "../boolean.h"
 
 #define IDGADGETUNDEF -1
 #define NAMAGADGETUNDEF "GADGETUNDEF"

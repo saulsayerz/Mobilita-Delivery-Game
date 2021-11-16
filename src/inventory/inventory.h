@@ -1,7 +1,7 @@
 #ifndef INVENTORY_H
 #define INVENTORY_H
 
-#include "gadget.h"
+#include "../gadget/gadget.h"
 
 #define INVENTORYCAPACITY 5
 

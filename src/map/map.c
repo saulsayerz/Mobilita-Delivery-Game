@@ -1,7 +1,4 @@
 #include "map.h"
-#include "./ADTPrimitif/point.c"
-#include "./ADTPrimitif/wordmachine.c"
-#include "./ADTPrimitif/charmachine.c"
 #include <stdio.h>
 #include <stdlib.h>
 static FILE * tape;
@@ -120,9 +117,8 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar) {
     asal = currentWord.contents[0];
     advWord();
     tujuan = currentWord.contents[0];
-    adv();
-    adv();
-    jenis = currentChar;
+    advWord();
+    jenis = currentWord.contents[0];
     if (jenis== 'P'){
         advWord();
         perishable = kataToInt(currentWord);
@@ -136,7 +132,7 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar) {
     fclose(tape);
 }
 
-void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name)
+void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadget *gadget)
 {
     int x,y,i,j ;
     char nama;
@@ -186,6 +182,60 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name)
     adv();
     for (i=0; i<NEFF(*daftar)-1;i++) {
         copyWord();
+        advWord();
+        advWord();
+        advWord();
+        if (currentWord.contents[0]== 'P'){
+            advWord();
+        }
+        adv();
+    }
+    copyWord();
+    advWord();
+    advWord();
+    advWord();
+    if (currentWord.contents[0]== 'P'){
+        advWord();
+    }
+
+    // Load Mobita dari save game
+    adv();
+    adv();
+    advWord();
+    UANG(*player) = kataToInt(currentWord);
+    adv();
+    copyWord();
+    WAKTU(*player) = kataToInt(currentWord) - 1;
+    adv();
+    copyWord();
+    x = kataToInt(currentWord);
+    advWord();
+    y = kataToInt(currentWord);
+    changePosisi(player, x,y);
+    adv();
+    copyWord();
+    int inventoryLength = kataToInt(currentWord);
+
+    for (int i = 0; i < inventoryLength; i++)
+    {
+        adv();
+        copyWord();
+        int id = kataToInt(currentWord);
+        advWord();
+        int total = kataToInt(currentWord);
+        
+        Gadget savedGadget = *(gadget + id);
+        for (int j = 0; j < total; j++)
+        {
+            addGadgetToInventory(&INVENTORY(*player), savedGadget);
+        }
+    }
+    adv();
+    copyWord();
+    NEFF(*daftar) = kataToInt(currentWord);
+    adv();
+    for (i=0; i<NEFF(*daftar)-1;i++) {
+        copyWord();
         waktu = kataToInt(currentWord);
         advWord();
         asal = currentWord.contents[0];
@@ -211,9 +261,8 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name)
     asal = currentWord.contents[0];
     advWord();
     tujuan = currentWord.contents[0];
-    adv();
-    adv();
-    jenis = currentChar;
+    advWord();
+    jenis = currentWord.contents[0];
     if (jenis== 'P'){
         advWord();
         perishable = kataToInt(currentWord);
@@ -224,21 +273,7 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name)
     CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
     //cetakPesanan(pesan);
     daftar->contents[i] = pesan;
-
-    // Load Mobita dari save game
-    advWord();
-    UANG(*player) = kataToInt(currentWord);
-    adv();
-    copyWord();
-    WAKTU(*player) = kataToInt(currentWord);
-    adv();
-    copyWord();
-    x = kataToInt(currentWord);
-    advWord();
-    y = kataToInt(currentWord);
-
-    changePosisi(player, x,y);
-
+    
     fclose(tape);
 }
 

@@ -1,11 +1,14 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "./ADTPrimitif/boolean.h"
-#include "./ADTPrimitif/matrix.h"
-#include "./ADTPrimitif/point.h"
-#include "pesanan.h"
-#include "mobita.h"
+#include "../boolean.h"
+#include "matrix.h"
+#include "point.h"
+#include "../mesin/wordmachine.h"
+#include "../mesin/charmachine.h"
+#include "../pesanan/pesanan.h"
+#include "../mobita/mobita.h"
+#include "../gadget/gadget.h"
 
 typedef struct
 {
@@ -41,7 +44,7 @@ void CreateMap(Map *peta);
 void CreateLoc(char nama, int i, int j, Lokasi *tempat);
 void displayMap(Map peta);
 void konfigurasi();
-void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name);
+void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadget *gadget);
 void cetakMatrix(Matrix M);
 POINT NameToPoint(Map peta, char nama);
 

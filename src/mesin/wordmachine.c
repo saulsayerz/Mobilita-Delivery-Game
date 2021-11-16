@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include "charmachine.h"
 #include "wordmachine.h"
-#include "boolean.h"
+#include "../boolean.h"
 
 boolean endWord;
 Word currentWord;

@@ -1,10 +1,12 @@
 #ifndef MOBITA_H
 #define MOBITA_H
-#include "todo.h"
-#include "inventory.h"
-#include "tas.h"
-#include "./ADTPrimitif/point.h"
-#include "effect_list.h"
+
+#include "../pesanan/todo.h"
+#include "../inventory/inventory.h"
+#include "../tas/tas.h"
+#include "../map/point.h"
+#include "../gadget/effect_list.h"
+#include "../gadget/gadget.h"
 
 typedef struct mobita
 {    
@@ -36,6 +38,11 @@ void createMobita(Mobita *m);
  **/
 void addOneToWaktu(Mobita *m);
 
+/**
+ * Menambahkan dua unit ke waktu
+ **/
+void addTwoToWaktu(Mobita *m);
+
 // kurangi waktu sebanyak n
 void decrementWaktu(Mobita *m, int n);
 
@@ -53,6 +60,16 @@ void addUang(Mobita *m, int jumlah);
  * Mengecek jumlah barang heavy pada in progress
  **/
 int checkHeavy(Mobita *m);
+
+void removeItemFromTasAndInProgress(Mobita *m);
+
+void addItemToTasAndInProgress(Mobita *m, Pesanan p);
+
+void decreasePerishableTime(Mobita *m);
+
+void resetMostRecentlyPerishableTime(Mobita *m);
+
+void effectHandlerChangePosisi(Mobita *m, int heavy, boolean pintuKemanaSajaEffect, boolean speedBoostEffect, boolean senterPembesarEffect);
 
 /**
  * Mengubah posisi

@@ -1,9 +1,11 @@
 #include "mobita.h"
-#include "effect_list.h"
+#include <stdio.h>
+#include <string.h>
 /**
  * Inisialisasi Mobita
  **/
 int speedBoostCounter;
+int sisaPesanan = 0;
 
 void createMobita(Mobita *m)
 {
@@ -125,6 +127,7 @@ void decreasePerishableTime(Mobita *m)
         if (JENIS(INFO(p)) == 'P' && PERISH(INFO(p)) == 0)
         {
             deleteAt(&INPROGRESS(*m), i);
+            sisaPesanan--;
             printf("Pesanan hangus\n");
         }
         p = NEXT(p);
@@ -226,26 +229,25 @@ void changePosisi(Mobita *m, int absis, int ordinat)
 void useGadget(Mobita *player, Gadget g)
 {
     Tas *tas = &TAS_MOBITA(*player);
-    int newMaxItem;
     Item itemTmp;
 
     // definisi
     char HEAVY = 'H';
 
-    if (g.nama == "Kain Pembungkus Waktu")
+    if (strcmp(NAMAGADGET(g), KAIN_PEMBUNGKUS_WAKTU) == 0)
     {
     }
-    else if (g.nama == "Pintu Kemana Saja")
+    else if (strcmp(NAMAGADGET(g), PINTU_KEMANA_SAJA) == 0)
     {
         printf("Kamu memakai Pintu Kemana Saja, di MOVE selanjutnya, kamu bisa berpindah dengan instan!\n");
         addEffect(&EFEK(*player), PINTU_KEMANA_SAJA);
     }
-    else if (g.nama == "Senter Pembesar")
+    else if (strcmp(NAMAGADGET(g), SENTER_PEMBESAR) == 0)
     {
         printf("Kamu memakai Senter Pembesar, TAS kamu membesar dua kali lipat!\n");
         setMaxItem(tas, MAX_ITEM(*tas) * 2);
     }
-    else if (g.nama == "Senter Pengecil")
+    else if (strcmp(NAMAGADGET(g), SENTER_PENGECIL) == 0)
     {
         itemTmp = TOP_TAS(*tas);
         if (JENIS(itemTmp) != HEAVY)
@@ -258,7 +260,7 @@ void useGadget(Mobita *player, Gadget g)
             addEffect(&EFEK(*player), SENTER_PENGECIL);
         }
     }
-    else if (g.nama == "Mesin Waktu")
+    else if (strcmp(NAMAGADGET(g), MESIN_WAKTU) == 0)
     {
         decrementWaktu(player, 50);
     }

@@ -1,4 +1,5 @@
 #include "effect_list.h"
+#include <stdio.h>
 
 void createEffectList(EffectList *L){
     NEFF_EFFECT_LIST(*L) = 0;

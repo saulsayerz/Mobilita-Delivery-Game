@@ -1,5 +1,6 @@
 #include "gadget.h"
-#include "mobita.h"
+#include <stdio.h>
+#include <string.h>
 
 void createGadget(Gadget *g){
     IDGADGET(*g) = IDGADGETUNDEF;
@@ -8,7 +9,7 @@ void createGadget(Gadget *g){
 }
 
 boolean isGadgetUNDEF(Gadget g){
-    return NAMAGADGET(g) == NAMAGADGETUNDEF && HARGAGADGET(g) == HARGAGADGETUNDEF;
+    return (strcmp(NAMAGADGET(g), NAMAGADGETUNDEF) == 0) && HARGAGADGET(g) == HARGAGADGETUNDEF;
 }
 
 Gadget newGadget(int id, char nama[], int harga)

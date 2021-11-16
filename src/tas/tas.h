@@ -1,7 +1,7 @@
 #ifndef TAS_H
 #define TAS_H
-#include "boolean.h"
-#include "pesanan.h"
+#include "../boolean.h"
+#include "../pesanan/pesanan.h"
 #define CAPACITY_TAS 100
 #define IDX_TAS_UNDEF -1
 typedef Pesanan Item;

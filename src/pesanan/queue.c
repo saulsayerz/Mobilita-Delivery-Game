@@ -73,30 +73,3 @@ void dequeue(Queue *q, Pesanan *val){
         IDX_HEAD(*q) += 1;
     }
 }
-/* Proses: Menghapus val pada q dengan aturan FIFO */
-/* I.S. q tidak mungkin kosong */
-/* F.S. val = nilai elemen HEAD pd I.S., HEAD dan IDX_HEAD "mundur";
-        q mungkin kosong */
-
-void displayQueue(Queue q){
-    int i;
-    int awal = IDX_HEAD(q) ;
-    printf("[");
-    if (!isEmptyQueue(q)) {
-        for(i=awal; i < IDX_TAIL(q)+1 ; i++){
-            IDX_HEAD(q) = i;
-            printf("%d", HEAD(q));
-            if (i != IDX_TAIL(q)) {
-                printf(",");
-            }
-        }
-    }
-    printf("]");
-    /* Proses : Menuliskan isi Queue dengan traversal, Queue ditulis di antara kurung 
-   siku; antara dua elemen dipisahkan dengan separator "koma", tanpa tambahan 
-   karakter di depan, di tengah, atau di belakang, termasuk spasi dan enter */
-/* I.S. q boleh kosong */
-/* F.S. Jika q tidak kosong: [e1,e2,...,en] */
-/* Contoh : jika ada tiga elemen bernilai 1, 20, 30 akan dicetak: [1,20,30] */
-/* Jika Queue kosong : menulis [] */
-}
