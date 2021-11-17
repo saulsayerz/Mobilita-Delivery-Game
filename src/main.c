@@ -109,10 +109,7 @@ void pickUp(Map peta, Queue *urutan, Mobita *player)
                 SPEED_BOOST);
         }
 
-        if (JENIS(INFO(p)) == 'P')
-        {
-            setUppermostPerishableInitialTime(&TAS_MOBITA(*player), PERISH(INFO(p)));
-        }
+        
         printf("Pesanan berupa ");
         displayJenis(&INFO(p));
         printf(" berhasil diambil!!\n");
@@ -176,7 +173,6 @@ void dropOff(Map peta, Queue *urutan, Mobita *player)
             printf("Uang yang didapatkan : 400 Yen.\n");
             UANG(*player) += 400;
             setMaxItem(&TAS_MOBITA(*player), MAX_ITEM(TAS_MOBITA(*player)) + 1);
-            setUppermostPerishableInitialTime(&TAS_MOBITA(*player), PERISH(INFO(p)));
             printf("Mendapat ability: INCREASE CAPACITY!\n");
         }
         else if (JENIS(INFO(p)) == 'V')

@@ -12,7 +12,7 @@ boolean isGadgetUNDEF(Gadget g){
     return (strcmp(NAMAGADGET(g), NAMAGADGETUNDEF) == 0) && HARGAGADGET(g) == HARGAGADGETUNDEF;
 }
 
-Gadget newGadget(int id, char nama[], int harga)
+Gadget newGadget(int id, char* nama, int harga)
 {
     Gadget g;
     createGadget(&g);
@@ -25,11 +25,7 @@ Gadget newGadget(int id, char nama[], int harga)
 void displayName(char *nama)
 {
     int i = 0;
-    while ((*(nama + i) >= 65 && *(nama + i) <=122) || *(nama + i) == 32)
-    {
-        printf("%c", *(nama + i));
-        i++;
-    }
+    printf("%s", nama);
     printf(" ");
 }
 

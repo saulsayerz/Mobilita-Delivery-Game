@@ -11,13 +11,32 @@ void pushTas(Tas *t, ElTypeTas e)
     IDX_TOP_TAS(*t)
     ++;
     TOP_TAS(*t) = e;
+    if (JENIS(e) == 'P')
+    {
+        UPPERMOST_PERISHABLE_INITIAL_TIME(*t) = PERISH(e);
+    }
 }
 void popTas(Tas *t, ElTypeTas *e)
 {
+    Tas temp;
+    ElTypeTas tempEl;
+    boolean perishableFound = false;
+    
     MAX_ITEM(*t) = 3;
     *e = TOP_TAS(*t);
     IDX_TOP_TAS(*t)
     --;
+
+    temp = *t;
+    while (!isTasEmpty(temp) && !perishableFound)
+    {
+        popTas(&temp, &tempEl);
+        if (JENIS(tempEl) == 'P')
+        {
+            UPPERMOST_PERISHABLE_INITIAL_TIME(*t) = PERISH(tempEl);
+            perishableFound = true;
+        }
+    }
 }
 boolean isTasEmpty(Tas t)
 {
@@ -25,7 +44,7 @@ boolean isTasEmpty(Tas t)
 }
 boolean isTasFull(Tas t)
 {
-    return (IDX_TOP_TAS(t) == MAX_ITEM(t) - 1);
+    return (IDX_TOP_TAS(t) >= MAX_ITEM(t) - 1);
 }
 void setMaxItem(Tas *t, int max)
 {
@@ -66,10 +85,6 @@ void decreasePerishableTimeInTas(Tas *t)
     *t = j;
 }
 
-void setUppermostPerishableInitialTime(Tas *t, int time)
-{
-    UPPERMOST_PERISHABLE_INITIAL_TIME(*t) = time;
-}
 
 void resetMostRecentlyPerishableTimeInTas(Tas *t)
 {
