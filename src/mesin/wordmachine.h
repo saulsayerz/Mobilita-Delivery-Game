@@ -30,6 +30,8 @@ void startWord(char filename[]);
           atau endWord = false, currentWord adalah kata yang sudah diakuisisi,
           currentChar karakter pertama sesudah karakter terakhir kata */
 
+void startInputWord();
+
 void advWord();
 /* I.S. : currentChar adalah karakter pertama kata yang akan diakuisisi 
    F.S. : currentWord adalah kata terakhir yang sudah diakuisisi, 
@@ -47,7 +49,11 @@ void copyWord();
 
 int charToInt(char c);
 int kataToInt(Word kata);
+char* akusisi(Word kata);
 void displayKata();
+int string_length(char *str);
+int strings_not_equal(Word str1, char *str2);
+int strings_not_equal_v2(char *str1, char *str2);
 
 #endif
 

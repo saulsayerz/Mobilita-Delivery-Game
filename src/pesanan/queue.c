@@ -1,8 +1,3 @@
-//NAMA  : Saul Sayers
-//NIM   : 13520094 / 16520075
-//KELAS : K02 Alstrukdat
-//PRAPRAKTIKUM 7
-
 #include <stdio.h>
 #include "queue.h"
 

@@ -43,14 +43,14 @@ void displayMap(Map peta){ //INI BELUM JADIII
     cetakMatrix(m);
 }
 
-void konfigurasi(Map *peta, DaftarPesanan *daftar) {
+void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name) {
     int x,y,i,j ;
     char nama;
     int waktu,perishable;
     char asal,tujuan,jenis;
     Pesanan pesan;
     Lokasi lok ;
-    startWord("test.txt");
+    startWord(name);
     MAPROW(*peta) = kataToInt(currentWord);
     advWord();
     MAPCOL(*peta) = kataToInt(currentWord);

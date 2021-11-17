@@ -1,6 +1,7 @@
 #ifndef GADGET_H
 #define GADGET_H
 #include "../boolean.h"
+#include "../mesin/wordmachine.h"
 
 #define IDGADGETUNDEF -1
 #define NAMAGADGETUNDEF "GADGETUNDEF"
