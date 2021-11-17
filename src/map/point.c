@@ -118,7 +118,7 @@ void Mirror (POINT *P, boolean SbX){
 
 void Putar (POINT *P, float Sudut){
     float x,y, radian;
-    radian = Sudut*M_PI/180; // konversi sudut menjadi radian dalam pi
+    radian = Sudut*3.14/180; // konversi sudut menjadi radian dalam pi
     x=Absis(*P);
     y=Ordinat(*P);
     Absis(*P)=x*cos(radian)+y*sin(radian); // Menggunakan rumus transformasi matriks rotasi
