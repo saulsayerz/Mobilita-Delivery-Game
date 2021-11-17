@@ -9,7 +9,7 @@ compileobj:  main.c $(DEPEND_FILE)
 	$(CC) $(CFLAGS) main.c $(DEPEND_FILE)
 
 rmunused:
-	del *driver.o
+	rm *driver.o
 
 build:
 	$(CC) $(OBJ_FILE) -o main $(LINKER)
@@ -17,7 +17,7 @@ build:
 .PHONY: clean all
 
 clean:
-	-del *.o
+	-rm *.o
 
 test: main
 	./main

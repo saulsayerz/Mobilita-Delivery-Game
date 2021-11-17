@@ -1,7 +1,6 @@
 #include "map.h"
 #include <stdio.h>
 #include <stdlib.h>
-static FILE * tape;
 
 void CreateMap(Map *peta){
     MAPROW(*peta) = 0;
@@ -78,6 +77,7 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name) {
         ELEMEN(MAPLOC(*peta),i) = lok;
         adv();
     }
+    
     ROWS(MAPADJ(*peta)) = NEFF(MAPLOC(*peta));
     COLS(MAPADJ(*peta)) = NEFF(MAPLOC(*peta));
     for (i=0 ; i < NEFF(MAPLOC(*peta)); i++){
@@ -90,7 +90,7 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name) {
     copyWord();
     NEFF(*daftar) = kataToInt(currentWord);
     adv();
-    for (i=0; i<NEFF(*daftar)-1;i++) {
+    for (i=0; i<NEFF(*daftar);i++) {
         copyWord();
         waktu = kataToInt(currentWord);
         advWord();
@@ -109,26 +109,11 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name) {
         CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
         //cetakPesanan(pesan);
         daftar->contents[i] = pesan;
-        adv();
+        if (i + 1 != NEFF(*daftar))
+        {
+            adv();
+        }
     }
-    copyWord();
-    waktu = kataToInt(currentWord);
-    advWord();
-    asal = currentWord.contents[0];
-    advWord();
-    tujuan = currentWord.contents[0];
-    advWord();
-    jenis = currentWord.contents[0];
-    if (jenis== 'P'){
-        advWord();
-        perishable = kataToInt(currentWord);
-    }
-    else {
-        perishable = -1; // INI UNDEF
-    }
-    CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
-    daftar->contents[i] = pesan;
-    fclose(tape);
 }
 
 void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadget *gadget)
@@ -179,7 +164,7 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadg
     copyWord();
     NEFF(*daftar) = kataToInt(currentWord);
     adv();
-    for (i=0; i<NEFF(*daftar)-1;i++) {
+    for (i=0; i<NEFF(*daftar);i++) {
         copyWord();
         advWord();
         advWord();
@@ -188,13 +173,10 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadg
             advWord();
         }
         adv();
-    }
-    copyWord();
-    advWord();
-    advWord();
-    advWord();
-    if (currentWord.contents[0]== 'P'){
-        advWord();
+        if (i + 1 != NEFF(*daftar))
+        {
+            adv();
+        }
     }
 
     // Load Mobita dari save game
@@ -271,8 +253,6 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadg
     }
     CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
     daftar->contents[i] = pesan;
-    
-    fclose(tape);
 }
 
 void cetakMatrix(Matrix m){

@@ -423,7 +423,9 @@ void saveGame(Mobita *player, Queue *urutan)
     FILE *original, *copy;
     int c;
     original = fopen(fileKonfig, "r");
-    copy = fopen("savegame.txt", "w");
+    startInputWord();
+    char* name = akusisi(currentWord);
+    copy = fopen(name, "w");
     if (!original || !copy)
     {
         puts("File error!");
@@ -434,7 +436,7 @@ void saveGame(Mobita *player, Queue *urutan)
     fclose(original);
     fclose(copy);
 
-    copy = fopen("savegame.txt", "a");
+    copy = fopen(name, "a");
 
     fprintf(copy, "\n%d", UANG(*player));
     fprintf(copy, "\n%d", WAKTU(*player));
@@ -534,7 +536,8 @@ void saveGame(Mobita *player, Queue *urutan)
 
 void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
 {
-    for (int i = 0; i < lengthQueue(*urutan); i++)
+    int lenQ = lengthQueue(*urutan);
+    for (int i = 0; i < lenQ; i++)
     {
         if (WAKTUPESANAN(HEAD(*urutan)) <= WAKTU(*player))
         {
