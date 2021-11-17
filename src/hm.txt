@@ -29,3 +29,15 @@ J 8 7
 1 D A H
 5 E B N
 3 F C N
+
+10000
+4
+7 3
+0
+6
+3 F C N
+3 B I H
+2 C F N
+1 A H N
+1 D A H
+5 E B N
