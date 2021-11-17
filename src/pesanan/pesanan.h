@@ -6,7 +6,8 @@ typedef struct {
    char asal;
    char tujuan;
    char jenis;
-   int perishable; // -1 
+   int perishable; // -1
+   int initialPerishable; // -1 
 } Pesanan;
 
 typedef struct{
@@ -24,6 +25,7 @@ typedef struct{
 #define TUJUAN(p) (p).tujuan
 #define JENIS(p) (p).jenis
 #define PERISH(p) (p).perishable
+#define INITPERISH(p) (p).initialPerishable
 
 void CreatePesanan(int waktu, char asal,char tujuan, char jenis, int perishable, Pesanan *p);
 void cetakPesanan(Pesanan p);
