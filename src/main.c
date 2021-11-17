@@ -7,7 +7,7 @@
 
 // define global variables
 int pesananBerhasil = 0;
-char* fileKonfig = "konfigurasi.txt";
+char* fileKonfig;
 
 void move(Map peta, Queue *urutan, Mobita *player)
 {
@@ -420,14 +420,10 @@ void help()
 
 void saveGame(Mobita *player, Queue *urutan)
 {
-    char *name;
-    printf("Masukkan nama save file: ");
-    startInputWord();
-    name = currentWord.contents;
     FILE *original, *copy;
     int c;
     original = fopen(fileKonfig, "r");
-    copy = fopen(name, "w");
+    copy = fopen("savegame.txt", "w");
     if (!original || !copy)
     {
         puts("File error!");
@@ -438,7 +434,7 @@ void saveGame(Mobita *player, Queue *urutan)
     fclose(original);
     fclose(copy);
 
-    copy = fopen(name, "a");
+    copy = fopen("savegame.txt", "a");
 
     fprintf(copy, "\n%d", UANG(*player));
     fprintf(copy, "\n%d", WAKTU(*player));
@@ -662,7 +658,22 @@ int main()
         gadgets[4] = newGadget(4, SENTER_PENGECIL, 800);
         if (opsi == 1)
         {
-            konfigurasi(&peta, &daftar, fileKonfig); // ngebaca txt file ke program
+            char *konfName;
+            FILE *exist;
+            printf("Masukkan nama file konfig: ");
+            startInputWord();
+            konfName = akusisi(currentWord);
+            exist = fopen(konfName, "r");
+            while (exist == NULL)
+            {
+                printf("File tidak ditemukan!\n");
+                printf("Masukkan nama file konfig: ");
+                startInputWord();
+                konfName = akusisi(currentWord);
+                exist = fopen(konfName, "r");
+            }
+            fileKonfig = konfName;
+            konfigurasi(&peta, &daftar, konfName); // ngebaca txt file ke program
             printf("Konfigurasi permainan berhasil\n");
             int x = Absis(LOCPOINT(ELEMEN(MAPLOC(peta), 0))); // 0 adalah headquarter
             int y = Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta), 0)));
@@ -670,11 +681,21 @@ int main()
         }
         else
         {
-            char *name;
+            char *loadName;
+            FILE *exist;
             printf("Masukkan nama save file: ");
             startInputWord();
-            name = currentWord.contents;
-            loadGame(&peta, &daftar, &player, name, gadgets);
+            loadName = akusisi(currentWord);
+            exist = fopen(loadName, "r");
+            while (exist == NULL)
+            {
+                printf("File tidak ditemukan!\n");
+                printf("Masukkan nama file konfig: ");
+                startInputWord();
+                loadName = akusisi(currentWord);
+                exist = fopen(loadName, "r");
+            }
+            loadGame(&peta, &daftar, &player, loadName, gadgets);
             printf("Load game berhasil\n");
         }
 

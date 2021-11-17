@@ -1,4 +1,5 @@
 #include "gadget.h"
+#include <stdio.h>
 
 // UNCOMMENT JIKA MENGGUNAKAN 'code-runner'
 // #include "gadget.c"

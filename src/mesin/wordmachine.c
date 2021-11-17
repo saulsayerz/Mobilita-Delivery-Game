@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "wordmachine.h"
 
 boolean endWord;
@@ -92,7 +93,10 @@ int kataToInt(Word kata)
 
 char* akusisi(Word kata)
 {
-    char *akusisiKata;
+    copyWord();
+    char *akusisiKata = NULL;
+    
+    akusisiKata = malloc(kata.length * sizeof(char));
     int i = 0;
     while (i < kata.length)
     {

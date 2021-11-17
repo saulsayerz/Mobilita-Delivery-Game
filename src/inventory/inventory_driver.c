@@ -1,4 +1,5 @@
 #include "inventory.h"
+#include <stdio.h>
 
 // UNCOMMENT JIKA MENGGUNAKAN 'CODE RUNNER'
 // #include "inventory.c"

@@ -127,7 +127,6 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name) {
         perishable = -1; // INI UNDEF
     }
     CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
-    //cetakPesanan(pesan);
     daftar->contents[i] = pesan;
     fclose(tape);
 }
@@ -271,7 +270,6 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadg
         perishable = -1; // INI UNDEF
     }
     CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
-    //cetakPesanan(pesan);
     daftar->contents[i] = pesan;
     
     fclose(tape);
