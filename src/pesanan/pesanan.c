@@ -7,6 +7,7 @@ void CreatePesanan(int waktu, char asal,char tujuan, char jenis, int perishable,
     TUJUAN(*p) = tujuan;
     JENIS(*p) = jenis;
     PERISH(*p) = perishable;
+    INITPERISH(*p) = perishable;
 }
 
 void cetakPesanan(Pesanan p) {

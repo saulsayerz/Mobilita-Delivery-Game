@@ -57,15 +57,13 @@ int main()
     printf("Apakah tas 1 penuh setelah ditambah 1 item: %c\n", isTasFull(t1) ? 'Y' : 'N');
     printf("------------------------\n");
 
-    // tes mengurangi waktu semua peerishable dan mengetees uppermost perishable time
+    // tes mengurangi waktu semua perishable
     // expected value:
     //   waktu semua perishable di tas akan berkurang 1, dan yang menjadi 0 hilang
     decreasePerishableTimeInTas(&t1);
     t2 = t1;
     while (isTasEmpty(t2) == false)
     {
-        printf("Uppermost perishable initial time menjadi: %d\n", UPPERMOST_PERISHABLE_INITIAL_TIME(t2));
-
         popTas(&t2, &e);
         cetakPesanan(e);
     }

@@ -136,26 +136,19 @@ void decreasePerishableTime(Mobita *m)
 
 void resetMostRecentlyPerishableTime(Mobita *m)
 {
-    int resetValue = UPPERMOST_PERISHABLE_INITIAL_TIME(TAS_MOBITA(*m));
-    if (resetValue == -1)
-    {
-        // UDAH
-    }
-    else
-    {
-        Address p = INPROGRESS(*m);
-        while (JENIS(INFO(p)) == 'P')
-        {
-            p = NEXT(p);
-        }
 
-        if (JENIS(INFO(p)) == 'P')
-        {
-            PERISH(INFO(p)) = resetValue;
-        }
-
-        resetMostRecentlyPerishableTimeInTas(&TAS_MOBITA(*m));
+    Address p = INPROGRESS(*m);
+    while (JENIS(INFO(p)) == 'P')
+    {
+        p = NEXT(p);
     }
+
+    if (JENIS(INFO(p)) == 'P')
+    {
+        PERISH(INFO(p)) = INITPERISH(INFO(p));
+    }
+
+    resetMostRecentlyPerishableTimeInTas(&TAS_MOBITA(*m));
 }
 
 void effectHandlerChangePosisi(Mobita *m, int heavy, boolean pintuKemanaSajaEffect, boolean speedBoostEffect, boolean senterPembesarEffect)
@@ -233,6 +226,8 @@ void useGadget(Mobita *player, Gadget g)
 
     if (!strings_not_equal_v2(NAMAGADGET(g), KAIN_PEMBUNGKUS_WAKTU))
     {
+        resetMostRecentlyPerishableTime(player);
+        printf("Kamu baru saja menggunakan Kain Pembungkus Waktu! Perishable teratas akan kembali ke waktunya semula!\n");
     }
     else if (!strings_not_equal_v2(NAMAGADGET(g), PINTU_KEMANA_SAJA))
     {

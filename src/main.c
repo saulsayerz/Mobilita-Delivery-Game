@@ -423,6 +423,7 @@ void saveGame(Mobita *player, Queue *urutan)
     FILE *original, *copy;
     int c;
     original = fopen(fileKonfig, "r");
+    printf("Masukkan name save file: ");
     startInputWord();
     char* name = akusisi(currentWord);
     copy = fopen(name, "w");

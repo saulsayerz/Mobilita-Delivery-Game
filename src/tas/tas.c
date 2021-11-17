@@ -4,40 +4,21 @@ void createTas(Tas *t)
 {
     IDX_TOP_TAS(*t) = IDX_TAS_UNDEF;
     MAX_ITEM(*t) = 3;
-    UPPERMOST_PERISHABLE_INITIAL_TIME(*t) = -1;
 }
 void pushTas(Tas *t, ElTypeTas e)
 {
     IDX_TOP_TAS(*t)
     ++;
     TOP_TAS(*t) = e;
-    if (JENIS(e) == 'P')
-    {
-        UPPERMOST_PERISHABLE_INITIAL_TIME(*t) = PERISH(e);
-    }
 }
 void popTas(Tas *t, ElTypeTas *e)
 {
-    Tas temp;
-    ElTypeTas tempEl;
-    boolean perishableFound = false;
-    
     MAX_ITEM(*t) = 3;
     *e = TOP_TAS(*t);
     IDX_TOP_TAS(*t)
     --;
-
-    temp = *t;
-    while (!isTasEmpty(temp) && !perishableFound)
-    {
-        popTas(&temp, &tempEl);
-        if (JENIS(tempEl) == 'P')
-        {
-            UPPERMOST_PERISHABLE_INITIAL_TIME(*t) = PERISH(tempEl);
-            perishableFound = true;
-        }
-    }
 }
+
 boolean isTasEmpty(Tas t)
 {
     return (IDX_TOP_TAS(t) == IDX_TAS_UNDEF);
@@ -85,35 +66,25 @@ void decreasePerishableTimeInTas(Tas *t)
     *t = j;
 }
 
-
 void resetMostRecentlyPerishableTimeInTas(Tas *t)
 {
-    if (UPPERMOST_PERISHABLE_INITIAL_TIME(*t) == -1)
+    Tas j = *t;
+    Tas g;
+    createTas(&g);
+    Pesanan e;
+    while (JENIS(TOP_TAS(j)) != 'P')
     {
-        // DO NOTHING
+        popTas(&j, &e);
+        pushTas(&g, e);
     }
-    else
+    if (JENIS(TOP_TAS(j)) == 'P')
     {
-        Tas j = *t;
-        Tas g;
-        createTas(&g);
-        Pesanan e;
-        while (JENIS(TOP_TAS(j)) != 'P')
-        {
-            popTas(&j, &e);
-            pushTas(&g, e);
-        }
-
-        if (JENIS(TOP_TAS(j)) == 'P')
-        {
-            PERISH(TOP_TAS(j)) = UPPERMOST_PERISHABLE_INITIAL_TIME(*t);
-        }
-        while (!isTasEmpty(g))
-        {
-            popTas(&g, &e);
-            pushTas(&j, e);
-        }
-
-        *t = j;
+        PERISH(TOP_TAS(j)) = INITPERISH(TOP_TAS(j));
     }
+    while (!isTasEmpty(g))
+    {
+        popTas(&g, &e);
+        pushTas(&j, e);
+    }
+    *t = j;
 }
