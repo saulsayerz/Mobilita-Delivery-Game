@@ -49,7 +49,7 @@ void displayMap(Map peta)
     cetakMatrix(m);
 }
 
-void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name)
+int konfigurasi(Map *peta, DaftarPesanan *daftar, char *name)
 {
     int x, y, i, j;
     char nama;
@@ -128,6 +128,13 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name)
             adv();
         }
     }
+    adv();
+    advWord();
+    if (!strings_not_equal(currentWord, "valid_save"))
+    {
+        return 0;
+    }
+    return 1;
 }
 
 int loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadget *gadget)
@@ -199,7 +206,6 @@ int loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadge
     }
 
     // Load Mobita dari save game
-    adv();
     advWord();
     if (strings_not_equal(currentWord, "valid_save"))
     {
@@ -291,6 +297,8 @@ int loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadge
         }
         CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
         addItemToTasAndInProgress(player, pesan);
+        inverseTas(&TAS_MOBITA(*player));
+        inverseTodo(&INPROGRESS(*player));
         if (i + 1 != NEFF(*daftar))
         {
             adv();

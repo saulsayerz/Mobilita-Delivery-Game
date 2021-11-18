@@ -26,4 +26,5 @@ boolean isTasFull(Tas t);
 void setMaxItem(Tas *t, int max);
 void decreasePerishableTimeInTas(Tas *t);
 void resetMostRecentlyPerishableTimeInTas(Tas *t);
+void inverseTas(Tas *t);
 #endif

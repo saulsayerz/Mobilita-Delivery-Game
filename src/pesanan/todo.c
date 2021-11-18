@@ -191,3 +191,17 @@ void displayInProgress(List l)
         printf("Tidak ada pesanan yang sedang diantarkan\n");
     }
 }
+
+void inverseTodo(List *l)
+{
+    List invTodo;
+    CreateTodoList(&invTodo);
+    Address p = *l;
+    while (p != NULL)
+    {
+        insertFirst(&invTodo, INFO(p));
+        p = NEXT(p);
+    }
+    
+    *l = invTodo;
+}

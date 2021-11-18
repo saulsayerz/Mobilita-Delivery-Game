@@ -88,3 +88,16 @@ void resetMostRecentlyPerishableTimeInTas(Tas *t)
     }
     *t = j;
 }
+
+void inverseTas(Tas *t)
+{
+    Tas invTas;
+    createTas(&invTas);
+    while (!isTasEmpty(*t))
+    {
+        ElTypeTas temp;
+        popTas(t, &temp);
+        pushTas(&invTas, temp);
+    }
+    *t = invTas;
+}

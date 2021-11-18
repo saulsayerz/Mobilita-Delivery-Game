@@ -471,23 +471,35 @@ void saveGame(Mobita *player, Queue *urutan)
     FILE *original, *copy;
     int c;
     original = fopen(fileKonfig, "r");
+    char *name;
+
     printf("Masukkan name save file: ");
     startInputWord();
-    char *name = akusisi(currentWord);
+    name = akusisi(currentWord);
+    copy = fopen(name, "r");
+    while (copy != NULL)
+    {
+        printf("File sudah ada! Masukkan name file berbeda: ");
+        startInputWord();
+        name = akusisi(currentWord);
+        copy = fopen(name, "r");
+    }
+
     copy = fopen(name, "w");
     if (!original || !copy)
     {
         puts("File error!");
     }
-    while ((c = fgetc(original)) != EOF)
+    while ((c = fgetc(original)) != EOF && (c != 'v'))
+    {
         fputc(c, copy);
-
+    }
     fclose(original);
     fclose(copy);
 
     copy = fopen(name, "a");
 
-    fprintf(copy, "\nvalid_save");
+    fprintf(copy, "valid_save");
 
     fprintf(copy, "\n%d", UANG(*player));
     fprintf(copy, "\n%d", WAKTU(*player));
@@ -585,6 +597,7 @@ void saveGame(Mobita *player, Queue *urutan)
 
     fprintf(copy, "\n");
     fclose(copy);
+    printf("Berhasil menyimpan state saat ini!\n");
 }
 
 void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
@@ -662,10 +675,7 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
             {
                 saveGame(player, urutan);
             }
-            else
-            {
-                printf("Terimakasih telah bermain\n");
-            }
+            printf("Terimakasih telah bermain\n");
             return;
         }
     }
@@ -698,17 +708,18 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
 
 int main()
 {
-    int opsi, i;
+    int i;
+    Word opsi;
     Map peta;
     DaftarPesanan daftar;
     Mobita player;
     Queue urutan;
     Gadget gadgets[INVENTORYCAPACITY];
     CreateMap(&peta);
-    printf("Selamat datang di game TUBES K2 Kelompok 6\nketik 1 untuk new game\nketik 2 untuk load game\nketik 3 untuk exit\nmasukkan opsi: ");
+    printf("Selamat datang di game TUBES K2 Kelompok 6\n1. NEW (new game)\n2. LOAD (load game)\n3. EXIT (exit)\nmasukkan opsi: ");
     startInputWord();
-    opsi = kataToInt(currentWord);
-    if (opsi == 1 || opsi == 2)
+    opsi = currentWord;
+    if (!strings_not_equal(opsi, "NEW") || !strings_not_equal(opsi, "LOAD"))
     {
         createMobita(&player);
         gadgets[0] = newGadget(0, KAIN_PEMBUNGKUS_WAKTU, 800);
@@ -716,7 +727,7 @@ int main()
         gadgets[2] = newGadget(2, PINTU_KEMANA_SAJA, 1500);
         gadgets[3] = newGadget(3, MESIN_WAKTU, 3000);
         gadgets[4] = newGadget(4, SENTER_PENGECIL, 800);
-        if (opsi == 1)
+        if (!strings_not_equal(opsi, "NEW"))
         {
             char *konfName;
             FILE *exist;
@@ -733,11 +744,21 @@ int main()
                 exist = fopen(konfName, "r");
             }
             fileKonfig = konfName;
-            konfigurasi(&peta, &daftar, konfName); // ngebaca txt file ke program
-            printf("Konfigurasi permainan berhasil\n");
-            int x = Absis(LOCPOINT(ELEMEN(MAPLOC(peta), 0))); // 0 adalah headquarter
-            int y = Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta), 0)));
-            changePosisi(&player, x, y); // Mengubah koordinat awal nobita menjadi headquarter
+
+            int successStart = konfigurasi(&peta, &daftar, konfName);
+            if (successStart)
+            {
+
+                printf("Konfigurasi permainan berhasil\n");
+                int x = Absis(LOCPOINT(ELEMEN(MAPLOC(peta), 0))); // 0 adalah headquarter
+                int y = Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta), 0)));
+                changePosisi(&player, x, y); // Mengubah koordinat awal nobita menjadi headquarter
+            }
+            else
+            {
+                printf("Bukan konfigurasi game yang valid! Fatal error\n");
+                return 0;
+            }
         }
         else
         {
@@ -755,6 +776,8 @@ int main()
                 loadName = akusisi(currentWord);
                 exist = fopen(loadName, "r");
             }
+
+            fileKonfig = loadName;
             int successLoad = loadGame(&peta, &daftar, &player, loadName, gadgets);
             if (successLoad)
             {
@@ -775,6 +798,10 @@ int main()
         }
         help();
         pilihCommand(peta, &urutan, &player, gadgets);
+    }
+    else
+    {
+        printf("Keluar dari permainan\n");
     }
     return 0;
 }

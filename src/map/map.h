@@ -43,7 +43,7 @@ typedef struct
 void CreateMap(Map *peta);
 void CreateLoc(char nama, int i, int j, Lokasi *tempat);
 void displayMap(Map peta);
-void konfigurasi();
+int konfigurasi();
 int loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadget *gadget);
 void cetakMatrix(Matrix M);
 POINT NameToPoint(Map peta, char nama);

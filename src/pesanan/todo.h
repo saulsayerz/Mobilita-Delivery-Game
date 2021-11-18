@@ -67,4 +67,5 @@ int length(List l);
 /* Mengirimkan banyaknya elemen list; mengirimkan 0 jika list kosong */
 
 void displayInProgress(List l);
+void inverseTodo(List *l);
 #endif
