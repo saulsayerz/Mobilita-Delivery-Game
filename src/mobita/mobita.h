@@ -68,7 +68,7 @@ void addItemToTasAndInProgress(Mobita *m, Pesanan p);
 
 void decreasePerishableTime(Mobita *m);
 
-void resetMostRecentlyPerishableTime(Mobita *m);
+int resetMostRecentlyPerishableTime(Mobita *m);
 
 void effectHandlerChangePosisi(Mobita *m, int heavy, boolean pintuKemanaSajaEffect, boolean speedBoostEffect, boolean senterPembesarEffect);
 

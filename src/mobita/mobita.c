@@ -18,7 +18,7 @@ void createMobita(Mobita *m)
     createTas(&t);
     // assign tiap properti objek
     INVENTORY(*m) = i;
-    UANG(*m) = 2500;
+    UANG(*m) = 5000;
     WAKTU(*m) = -1;
     POSISI(*m) = p;
     TODO(*m) = NULL;
@@ -135,21 +135,38 @@ void decreasePerishableTime(Mobita *m)
     decreasePerishableTimeInTas(&TAS_MOBITA(*m));
 }
 
-void resetMostRecentlyPerishableTime(Mobita *m)
+int isPerishableExist(Mobita *m)
 {
-
     Address p = INPROGRESS(*m);
-    while (JENIS(INFO(p)) == 'P')
+    int exist = 0;
+    while (p != NULL && !exist)
     {
+        if (JENIS(INFO(p)) == 'P')
+        {
+            exist = 1;
+        }
         p = NEXT(p);
     }
+    return exist;
+}
 
-    if (JENIS(INFO(p)) == 'P')
+int resetMostRecentlyPerishableTime(Mobita *m)
+{
+    if (isPerishableExist(m))
     {
-        PERISH(INFO(p)) = INITPERISH(INFO(p));
+        Address p = INPROGRESS(*m);
+        while (JENIS(INFO(p)) != 'P')
+        {
+            p = NEXT(p);
+        }
+        if (JENIS(INFO(p)) == 'P')
+        {
+            PERISH(INFO(p)) = INITPERISH(INFO(p));
+        }
+        resetMostRecentlyPerishableTimeInTas(&TAS_MOBITA(*m));
+        return 1;
     }
-
-    resetMostRecentlyPerishableTimeInTas(&TAS_MOBITA(*m));
+    return 0;
 }
 
 void effectHandlerChangePosisi(Mobita *m, int heavy, boolean pintuKemanaSajaEffect, boolean speedBoostEffect, boolean senterPembesarEffect)
@@ -227,8 +244,15 @@ void useGadget(Mobita *player, Gadget g)
 
     if (!strings_not_equal_v2(NAMAGADGET(g), KAIN_PEMBUNGKUS_WAKTU))
     {
-        resetMostRecentlyPerishableTime(player);
-        printf("Kamu baru saja menggunakan Kain Pembungkus Waktu! Perishable teratas akan kembali ke waktunya semula!\n");
+        int useful = resetMostRecentlyPerishableTime(player);
+        if (useful)
+        {
+            printf("Kamu baru saja menggunakan Kain Pembungkus Waktu! Perishable teratas akan kembali ke waktunya semula!\n");
+        }
+        else
+        {
+            printf("Kamu tidak memiliki perishable item, gadget digunakan sia-sia!\n");
+        }
     }
     else if (!strings_not_equal_v2(NAMAGADGET(g), PINTU_KEMANA_SAJA))
     {
