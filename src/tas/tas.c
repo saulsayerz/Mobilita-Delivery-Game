@@ -1,4 +1,5 @@
 #include "tas.h"
+#include <stdio.h>
 
 void createTas(Tas *t)
 {
@@ -13,7 +14,6 @@ void pushTas(Tas *t, ElTypeTas e)
 }
 void popTas(Tas *t, ElTypeTas *e)
 {
-    MAX_ITEM(*t) = 3;
     *e = TOP_TAS(*t);
     IDX_TOP_TAS(*t)
     --;

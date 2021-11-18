@@ -10,7 +10,7 @@
 #include "../mesin/wordmachine.h"
 
 typedef struct mobita
-{    
+{
     Inventory inventory;
     int waktu;
     int uang;

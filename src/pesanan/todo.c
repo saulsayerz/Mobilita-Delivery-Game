@@ -109,7 +109,7 @@ void displayJenis(Pesanan *p)
     case 'N':
         printf("Normal Item");
         break;
-    
+
     case 'H':
         printf("Heavy Item");
         break;
@@ -117,7 +117,7 @@ void displayJenis(Pesanan *p)
     case 'V':
         printf("VIP Item");
         break;
-    
+
     case 'P':
         printf("Perishable Item, sisa waktu %d", PERISH(*p));
 
@@ -146,7 +146,9 @@ void displayTodo(List l)
         printf("%d. %c -> %c (", i, info.asal, info.tujuan);
         displayJenis(&info);
         printf(")\n");
-    } else {
+    }
+    else
+    {
         printf("Tidak ada To Do List\n");
     }
 }
@@ -163,7 +165,8 @@ int length(List l)
     return panjang;
 }
 
-void displayInProgress(List l){
+void displayInProgress(List l)
+{
     Address alamat = l;
     int i = 1;
     if (!isEmpty(l))
@@ -182,7 +185,9 @@ void displayInProgress(List l){
         printf("%d. ", i);
         displayJenis(&info);
         printf(" (Tujuan : %c)\n", info.tujuan);
-    } else {
+    }
+    else
+    {
         printf("Tidak ada pesanan yang sedang diantarkan\n");
     }
 }

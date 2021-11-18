@@ -11,19 +11,19 @@
 #define CAPACITYQ 30
 
 /* Definisi elemen dan address */
-typedef struct {
-	Pesanan buffer[30]; 
-	int idxHead;
-	int idxTail;
+typedef struct
+{
+        Pesanan buffer[30];
+        int idxHead;
+        int idxTail;
 } Queue;
-
 
 /* ********* AKSES (Selektor) ********* */
 /* Jika q adalah Queue, maka akses elemen : */
 #define IDX_HEAD(q) (q).idxHead
 #define IDX_TAIL(q) (q).idxTail
-#define     HEAD(q) (q).buffer[(q).idxHead]
-#define     TAIL(q) (q).buffer[(q).idxTail]
+#define HEAD(q) (q).buffer[(q).idxHead]
+#define TAIL(q) (q).buffer[(q).idxTail]
 
 /* *** Kreator *** */
 void CreateQueue(Queue *q);

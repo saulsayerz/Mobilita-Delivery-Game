@@ -2,53 +2,61 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void CreateMap(Map *peta){
+void CreateMap(Map *peta)
+{
     MAPROW(*peta) = 0;
     MAPCOL(*peta) = 0;
     NEFF(MAPLOC(*peta)) = 0;
-    CONTENTS(MAPLOC(*peta)) = (Lokasi*) malloc (26 * sizeof(Lokasi));
+    CONTENTS(MAPLOC(*peta)) = (Lokasi *)malloc(26 * sizeof(Lokasi));
     KAPASITAS(MAPLOC(*peta)) = 26;
-    ROWS(MAPADJ(*peta)) = 0 ;
-    COLS(MAPADJ(*peta)) = 0 ;
+    ROWS(MAPADJ(*peta)) = 0;
+    COLS(MAPADJ(*peta)) = 0;
 }
 
-void CreateLoc(char nama, int i, int j, Lokasi *tempat){
+void CreateLoc(char nama, int i, int j, Lokasi *tempat)
+{
     LOCNAME(*tempat) = nama;
     Absis(LOCPOINT(*tempat)) = i;
-    Ordinat(LOCPOINT(*tempat)) = j; 
+    Ordinat(LOCPOINT(*tempat)) = j;
 }
 
-
-void displayMap(Map peta){ //INI BELUM JADIII
+void displayMap(Map peta)
+{ //INI BELUM JADIII
     Matrix m;
-    int i,j,x,y;
-    ROWS(m) = MAPROW(peta) +2;
-    COLS(m) = MAPCOL(peta) +2;
-    for (i = 0; i < MAPROW(peta)+2 ; i++) {
-        for (j = 0; j < MAPCOL(peta)+2 ; j++){
-            if (i==0 || j==0 || i==MAPROW(peta)+1||j==MAPCOL(peta)+1 ){
-                ELEMENM(m,i,j) = '*';
+    int i, j, x, y;
+    ROWS(m) = MAPROW(peta) + 2;
+    COLS(m) = MAPCOL(peta) + 2;
+    for (i = 0; i < MAPROW(peta) + 2; i++)
+    {
+        for (j = 0; j < MAPCOL(peta) + 2; j++)
+        {
+            if (i == 0 || j == 0 || i == MAPROW(peta) + 1 || j == MAPCOL(peta) + 1)
+            {
+                ELEMENM(m, i, j) = '*';
             }
-            else {
-                ELEMENM(m,i,j) = ' ';
+            else
+            {
+                ELEMENM(m, i, j) = ' ';
             }
         }
     }
-    for (i = 0; i < NEFF(MAPLOC(peta)) ; i++){
-        x = Absis(LOCPOINT(ELEMEN(MAPLOC(peta),i)));
-        y = Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta),i)));
-        ELEMENM(m,x,y) = LOCNAME(ELEMEN(MAPLOC(peta),i));
+    for (i = 0; i < NEFF(MAPLOC(peta)); i++)
+    {
+        x = Absis(LOCPOINT(ELEMEN(MAPLOC(peta), i)));
+        y = Ordinat(LOCPOINT(ELEMEN(MAPLOC(peta), i)));
+        ELEMENM(m, x, y) = LOCNAME(ELEMEN(MAPLOC(peta), i));
     }
     cetakMatrix(m);
 }
 
-void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name) {
-    int x,y,i,j ;
+void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name)
+{
+    int x, y, i, j;
     char nama;
-    int waktu,perishable;
-    char asal,tujuan,jenis;
+    int waktu, perishable;
+    char asal, tujuan, jenis;
     Pesanan pesan;
-    Lokasi lok ;
+    Lokasi lok;
     startWord(name);
     MAPROW(*peta) = kataToInt(currentWord);
     advWord();
@@ -58,14 +66,15 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name) {
     x = kataToInt(currentWord);
     advWord();
     y = kataToInt(currentWord);
-    CreateLoc('8', x, y, &lok); // UNTUK HEADQUARTERS
-    ELEMEN(MAPLOC(*peta),0) = lok; //MENGISI LOKASI HEADQUARTERS KE MAP
-    NEFF(MAPLOC(*peta)) = 1; //ISINYA MASIH HEADQUARTERS DOANG
+    CreateLoc('8', x, y, &lok);     // UNTUK HEADQUARTERS
+    ELEMEN(MAPLOC(*peta), 0) = lok; //MENGISI LOKASI HEADQUARTERS KE MAP
+    NEFF(MAPLOC(*peta)) = 1;        //ISINYA MASIH HEADQUARTERS DOANG
     adv();
     copyWord();
     NEFF(MAPLOC(*peta)) += kataToInt(currentWord); //Ini banyaknya lokasinya
     adv();
-    for (i=1; i<NEFF(MAPLOC(*peta)); i++){
+    for (i = 1; i < NEFF(MAPLOC(*peta)); i++)
+    {
         copyWord();
         nama = currentWord.contents[0];
         advWord();
@@ -74,15 +83,17 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name) {
         y = kataToInt(currentWord);
         //printf("%c %d %d\n", nama, x, y); MENCETAK TIAP LOKASI
         CreateLoc(nama, x, y, &lok); // UNTUK SEMUA LOKASI
-        ELEMEN(MAPLOC(*peta),i) = lok;
+        ELEMEN(MAPLOC(*peta), i) = lok;
         adv();
     }
-    
+
     ROWS(MAPADJ(*peta)) = NEFF(MAPLOC(*peta));
     COLS(MAPADJ(*peta)) = NEFF(MAPLOC(*peta));
-    for (i=0 ; i < NEFF(MAPLOC(*peta)); i++){
-        for (j=0 ; j < NEFF(MAPLOC(*peta));j++) {
-            ELEMENM(MAPADJ(*peta),i,j) = currentChar;
+    for (i = 0; i < NEFF(MAPLOC(*peta)); i++)
+    {
+        for (j = 0; j < NEFF(MAPLOC(*peta)); j++)
+        {
+            ELEMENM(MAPADJ(*peta), i, j) = currentChar;
             adv();
             adv();
         }
@@ -90,7 +101,8 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name) {
     copyWord();
     NEFF(*daftar) = kataToInt(currentWord);
     adv();
-    for (i=0; i<NEFF(*daftar);i++) {
+    for (i = 0; i < NEFF(*daftar); i++)
+    {
         copyWord();
         waktu = kataToInt(currentWord);
         advWord();
@@ -99,11 +111,13 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name) {
         tujuan = currentWord.contents[0];
         advWord();
         jenis = currentWord.contents[0];
-        if (currentWord.contents[0]== 'P'){
+        if (currentWord.contents[0] == 'P')
+        {
             advWord();
             perishable = kataToInt(currentWord);
         }
-        else {
+        else
+        {
             perishable = -1; // INI UNDEF
         }
         CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
@@ -116,14 +130,14 @@ void konfigurasi(Map *peta, DaftarPesanan *daftar, char *name) {
     }
 }
 
-void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadget *gadget)
+int loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadget *gadget)
 {
-    int x,y,i,j ;
+    int x, y, i, j;
     char nama;
-    int waktu,perishable;
-    char asal,tujuan,jenis;
+    int waktu, perishable;
+    char asal, tujuan, jenis;
     Pesanan pesan;
-    Lokasi lok ;
+    Lokasi lok;
     startWord(name);
     MAPROW(*peta) = kataToInt(currentWord);
     advWord();
@@ -133,14 +147,15 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadg
     x = kataToInt(currentWord);
     advWord();
     y = kataToInt(currentWord);
-    CreateLoc('8', x, y, &lok); // UNTUK HEADQUARTERS
-    ELEMEN(MAPLOC(*peta),0) = lok; //MENGISI LOKASI HEADQUARTERS KE MAP
-    NEFF(MAPLOC(*peta)) = 1; //ISINYA MASIH HEADQUARTERS DOANG
+    CreateLoc('8', x, y, &lok);     // UNTUK HEADQUARTERS
+    ELEMEN(MAPLOC(*peta), 0) = lok; //MENGISI LOKASI HEADQUARTERS KE MAP
+    NEFF(MAPLOC(*peta)) = 1;        //ISINYA MASIH HEADQUARTERS DOANG
     adv();
     copyWord();
     NEFF(MAPLOC(*peta)) += kataToInt(currentWord); //Ini banyaknya lokasinya
     adv();
-    for (i=1; i<NEFF(MAPLOC(*peta)); i++){
+    for (i = 1; i < NEFF(MAPLOC(*peta)); i++)
+    {
         copyWord();
         nama = currentWord.contents[0];
         advWord();
@@ -149,14 +164,16 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadg
         y = kataToInt(currentWord);
         //printf("%c %d %d\n", nama, x, y); MENCETAK TIAP LOKASI
         CreateLoc(nama, x, y, &lok); // UNTUK SEMUA LOKASI
-        ELEMEN(MAPLOC(*peta),i) = lok;
+        ELEMEN(MAPLOC(*peta), i) = lok;
         adv();
     }
     ROWS(MAPADJ(*peta)) = NEFF(MAPLOC(*peta));
     COLS(MAPADJ(*peta)) = NEFF(MAPLOC(*peta));
-    for (i=0 ; i < NEFF(MAPLOC(*peta)); i++){
-        for (j=0 ; j < NEFF(MAPLOC(*peta));j++) {
-            ELEMENM(MAPADJ(*peta),i,j) = currentChar;
+    for (i = 0; i < NEFF(MAPLOC(*peta)); i++)
+    {
+        for (j = 0; j < NEFF(MAPLOC(*peta)); j++)
+        {
+            ELEMENM(MAPADJ(*peta), i, j) = currentChar;
             adv();
             adv();
         }
@@ -164,12 +181,14 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadg
     copyWord();
     NEFF(*daftar) = kataToInt(currentWord);
     adv();
-    for (i=0; i<NEFF(*daftar);i++) {
+    for (i = 0; i < NEFF(*daftar); i++)
+    {
         copyWord();
         advWord();
         advWord();
         advWord();
-        if (currentWord.contents[0]== 'P'){
+        if (currentWord.contents[0] == 'P')
+        {
             advWord();
         }
         adv();
@@ -181,8 +200,13 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadg
 
     // Load Mobita dari save game
     adv();
-    adv();
     advWord();
+    if (strings_not_equal(currentWord, "valid_save"))
+    {
+        return 0;
+    }
+    adv();
+    copyWord();
     UANG(*player) = kataToInt(currentWord);
     adv();
     copyWord();
@@ -192,7 +216,7 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadg
     x = kataToInt(currentWord);
     advWord();
     y = kataToInt(currentWord);
-    changePosisi(player, x,y);
+    changePosisi(player, x, y);
     adv();
     copyWord();
     int inventoryLength = kataToInt(currentWord);
@@ -204,7 +228,7 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadg
         int id = kataToInt(currentWord);
         advWord();
         int total = kataToInt(currentWord);
-        
+
         Gadget savedGadget = *(gadget + id);
         for (int j = 0; j < total; j++)
         {
@@ -215,7 +239,8 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadg
     copyWord();
     NEFF(*daftar) = kataToInt(currentWord);
     adv();
-    for (i=0; i<NEFF(*daftar)-1;i++) {
+    for (i = 0; i < NEFF(*daftar); i++)
+    {
         copyWord();
         waktu = kataToInt(currentWord);
         advWord();
@@ -224,54 +249,78 @@ void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadg
         tujuan = currentWord.contents[0];
         advWord();
         jenis = currentWord.contents[0];
-        if (currentWord.contents[0]== 'P'){
+        if (currentWord.contents[0] == 'P')
+        {
             advWord();
             perishable = kataToInt(currentWord);
         }
-        else {
+        else
+        {
             perishable = -1; // INI UNDEF
         }
         CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
         //cetakPesanan(pesan);
         daftar->contents[i] = pesan;
-        adv();
+        if (i + 1 != NEFF(*daftar))
+        {
+            adv();
+        }
     }
+    adv();
     copyWord();
-    waktu = kataToInt(currentWord);
-    advWord();
-    asal = currentWord.contents[0];
-    advWord();
-    tujuan = currentWord.contents[0];
-    advWord();
-    jenis = currentWord.contents[0];
-    if (jenis== 'P'){
+    int neffInprogress = kataToInt(currentWord);
+    adv();
+    for (i = 0; i < neffInprogress; i++)
+    {
+        copyWord();
+        waktu = kataToInt(currentWord);
         advWord();
-        perishable = kataToInt(currentWord);
+        asal = currentWord.contents[0];
+        advWord();
+        tujuan = currentWord.contents[0];
+        advWord();
+        jenis = currentWord.contents[0];
+        if (currentWord.contents[0] == 'P')
+        {
+            advWord();
+            perishable = kataToInt(currentWord);
+        }
+        else
+        {
+            perishable = -1;
+        }
+        CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
+        addItemToTasAndInProgress(player, pesan);
+        if (i + 1 != NEFF(*daftar))
+        {
+            adv();
+        }
     }
-    else {
-        perishable = -1; // INI UNDEF
-    }
-    CreatePesanan(waktu, asal, tujuan, jenis, perishable, &pesan);
-    daftar->contents[i] = pesan;
+    return 1;
 }
 
-void cetakMatrix(Matrix m){
+void cetakMatrix(Matrix m)
+{
     int i, j;
-	for (i = 0; i < ROWS(m); i++){
-		for (j = 0; j < COLS(m); j++){
-			if (j==0) {
-                printf("%c", ELMT(m,i,j));
+    for (i = 0; i < ROWS(m); i++)
+    {
+        for (j = 0; j < COLS(m); j++)
+        {
+            if (j == 0)
+            {
+                printf("%c", ELMT(m, i, j));
             }
-            else {
-                printf(" %c", ELMT(m,i,j));
+            else
+            {
+                printf(" %c", ELMT(m, i, j));
             }
-		}
+        }
         printf("\n");
-	}
+    }
 }
 
 POINT NameToPoint(Map peta, char nama)
-{   
+{
     int i;
     POINT hasil;
     for (i = 0; i < NEFF(MAPLOC(peta)); i++) //harusnya searching pake while tapi mager

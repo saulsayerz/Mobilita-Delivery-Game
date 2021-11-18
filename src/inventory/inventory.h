@@ -5,11 +5,12 @@
 
 #define INVENTORYCAPACITY 5
 
-typedef struct inventory {
+typedef struct inventory
+{
     Gadget listGadget[INVENTORYCAPACITY];
 } Inventory;
 
-#define GADGETINIDX(i,idx) (i).listGadget[(idx)] 
+#define GADGETINIDX(i, idx) (i).listGadget[(idx)]
 
 /**
  * Menginisialisasi inventory
@@ -46,7 +47,7 @@ int addGadgetToInventory(Inventory *i, Gadget g);
 
 /**
  * Apakah inventory penuh?
- **/ 
+ **/
 void isInventoryFull(Inventory i);
 
 #endif

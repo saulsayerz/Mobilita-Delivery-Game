@@ -5,8 +5,9 @@
 #include "pesanan.h"
 
 typedef Pesanan ElType;
-typedef struct node* Address;
-typedef struct node {
+typedef struct node *Address;
+typedef struct node
+{
     ElType info;
     Address next;
 } Node;
@@ -15,6 +16,5 @@ typedef struct node {
 #define NEXT(p) (p)->next
 
 Address newNode(ElType val);
-
 
 #endif

@@ -1,11 +1,12 @@
 #include "matrix.c"
 
-int main() {
-    Matrix m1,m2,m3;
-    CreateMatrix(3,3,&m1);
-    CreateMatrix(3,3,&m2);
-    readMatrix(&m1,3,3);
-    readMatrix(&m2,2,3);
+int main()
+{
+    Matrix m1, m2, m3;
+    CreateMatrix(3, 3, &m1);
+    CreateMatrix(3, 3, &m2);
+    readMatrix(&m1, 3, 3);
+    readMatrix(&m2, 2, 3);
     m3 = multiplyMatrix(m1, m2);
     displayMatrix(m1);
     printf("\n");

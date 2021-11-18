@@ -7,15 +7,16 @@
 typedef Pesanan Item;
 typedef Item ElTypeTas;
 
-typedef struct tas {
+typedef struct tas
+{
     ElTypeTas buffer[CAPACITY_TAS];
     int idxTopTas;
     int maxItem;
 } Tas;
 
 #define IDX_TOP_TAS(t) (t).idxTopTas
-#define     TOP_TAS(t) (t).buffer[(t).idxTopTas]
-#define     MAX_ITEM(t) (t).maxItem
+#define TOP_TAS(t) (t).buffer[(t).idxTopTas]
+#define MAX_ITEM(t) (t).maxItem
 
 void createTas(Tas *t);
 void pushTas(Tas *t, ElTypeTas e);
@@ -26,6 +27,3 @@ void setMaxItem(Tas *t, int max);
 void decreasePerishableTimeInTas(Tas *t);
 void resetMostRecentlyPerishableTimeInTas(Tas *t);
 #endif
-
-
-

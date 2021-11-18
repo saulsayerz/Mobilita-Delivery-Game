@@ -10,7 +10,8 @@
 #define CAPACITY 50
 #define BLANK ' '
 
-typedef struct {
+typedef struct
+{
    char contents[CAPACITY]; /* container penyimpan kata, indeks yang dipakai [0..CAPACITY-1] */
    int length;
 } Word;
@@ -49,11 +50,10 @@ void copyWord();
 
 int charToInt(char c);
 int kataToInt(Word kata);
-char* akusisi(Word kata);
+char *akusisi(Word kata);
 void displayKata();
 int string_length(char *str);
 int strings_not_equal(Word str1, char *str2);
 int strings_not_equal_v2(char *str1, char *str2);
 
 #endif
-

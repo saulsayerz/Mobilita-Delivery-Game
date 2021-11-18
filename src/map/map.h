@@ -12,21 +12,21 @@
 
 typedef struct
 {
-   char nama; /* banyaknya/ukuran baris yg terdefinisi */
+   char nama;   /* banyaknya/ukuran baris yg terdefinisi */
    POINT titik; /* banyaknya/ukuran kolom yg terdefinisi */
 } Lokasi;
 
 typedef struct
 {
-    Lokasi *contents; /* memori tempat penyimpan elemen (container) */
-    int nEff;       /* >=0, banyaknya elemen efektif */
-    int capacity;   /* ini nanti bakal jadi 26 karena di spek soal gitu */
+   Lokasi *contents; /* memori tempat penyimpan elemen (container) */
+   int nEff;         /* >=0, banyaknya elemen efektif */
+   int capacity;     /* ini nanti bakal jadi 26 karena di spek soal gitu */
 } ListDinamis;
 
 typedef struct
 {
    ListDinamis lokasi; // maksimal 26 karena lokasi terbanyak di spek cuman 26;
-   int row; /* banyaknya/ukuran baris peta yg terdefinisi */
+   int row;            /* banyaknya/ukuran baris peta yg terdefinisi */
    int col;
    Matrix adjacency; /* banyaknya/ukuran kolom  peta yg terdefinisi */
 } Map;
@@ -44,7 +44,7 @@ void CreateMap(Map *peta);
 void CreateLoc(char nama, int i, int j, Lokasi *tempat);
 void displayMap(Map peta);
 void konfigurasi();
-void loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadget *gadget);
+int loadGame(Map *peta, DaftarPesanan *daftar, Mobita *player, char *name, Gadget *gadget);
 void cetakMatrix(Matrix M);
 POINT NameToPoint(Map peta, char nama);
 

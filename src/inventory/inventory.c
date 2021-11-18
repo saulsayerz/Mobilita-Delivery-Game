@@ -18,15 +18,20 @@ void createInventory(Inventory *i)
 /**
  * Display Inventory
  **/
-void displayInventory(Inventory i){
+void displayInventory(Inventory i)
+{
     int idx = 0;
     Gadget temp;
-    while (idx < INVENTORYCAPACITY){
+    while (idx < INVENTORYCAPACITY)
+    {
         temp = GADGETINIDX(i, idx);
-        printf("%d. ", idx+1);
-        if (isGadgetUNDEF(temp)){
+        printf("%d. ", idx + 1);
+        if (isGadgetUNDEF(temp))
+        {
             printf("-\n");
-        } else {
+        }
+        else
+        {
             printf("%s", NAMAGADGET(temp));
             printf("\n");
         }
@@ -37,7 +42,8 @@ void displayInventory(Inventory i){
 /**
  * Set Inventory in an index
  **/
-void setGadgetFromInventoryOnIDX(Inventory *i, int idx, Gadget g){
+void setGadgetFromInventoryOnIDX(Inventory *i, int idx, Gadget g)
+{
     GADGETINIDX(*i, idx) = g;
 }
 
@@ -58,12 +64,15 @@ void deleteGadgetFromInvetoryOnIDX(Inventory *i, int idx)
  **/
 void takeGadgetFromInventory(Inventory *i, int idx, Gadget *g)
 {
-    if(isGadgetUNDEF(GADGETINIDX(*i, idx))){
+    if (isGadgetUNDEF(GADGETINIDX(*i, idx)))
+    {
         // DONT DO ANYTHING
-    } else {
+    }
+    else
+    {
         *g = GADGETINIDX(*i, idx);
-        deleteGadgetFromInvetoryOnIDX(i, idx);  
-    } 
+        deleteGadgetFromInvetoryOnIDX(i, idx);
+    }
 }
 /**
  * Add gadget to inventory
@@ -73,14 +82,18 @@ int addGadgetToInventory(Inventory *i, Gadget g)
 {
     // dapatkan gadget undef pertama
     int idx = 0;
-    while (idx < INVENTORYCAPACITY && !isGadgetUNDEF(GADGETINIDX(*i, idx))){
+    while (idx < INVENTORYCAPACITY && !isGadgetUNDEF(GADGETINIDX(*i, idx)))
+    {
         idx++;
     }
 
-    if (idx >= INVENTORYCAPACITY){
+    if (idx >= INVENTORYCAPACITY)
+    {
         printf("Inventory tidak cukup untuk menyimpan gadget\n");
         return 0;
-    } else {
+    }
+    else
+    {
         setGadgetFromInventoryOnIDX(i, idx, g);
         return 1;
     }

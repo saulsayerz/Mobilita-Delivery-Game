@@ -91,11 +91,11 @@ int kataToInt(Word kata)
     return hasil;
 }
 
-char* akusisi(Word kata)
+char *akusisi(Word kata)
 {
     copyWord();
     char *akusisiKata = NULL;
-    
+
     akusisiKata = malloc(kata.length * sizeof(char));
     int i = 0;
     while (i < kata.length)

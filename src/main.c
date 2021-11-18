@@ -7,7 +7,7 @@
 
 // define global variables
 int pesananBerhasil = 0;
-char* fileKonfig;
+char *fileKonfig;
 
 void move(Map peta, Queue *urutan, Mobita *player)
 {
@@ -102,31 +102,37 @@ void pickUp(Map peta, Queue *urutan, Mobita *player)
         }
     }
 
-    if (exist && !isTasFull(TAS_MOBITA(*player)))
+    if (JENIS(TOP_TAS(TAS_MOBITA(*player))) == 'V' && JENIS(INFO(p)) != 'V')
     {
-        if (JENIS(INFO(p)) == 'H' && isEffectExist(EFEK(*player), SPEED_BOOST))
+        printf("Tidak bisa melakukan pickup, kamu sedang melayani VIP!\n");
+    }
+    else
+    {
+        if (exist && !isTasFull(TAS_MOBITA(*player)))
         {
-            printf("Kamu baru saja mempickup item heavy, ability SPEED BOOST mu hilang :(\n");
-            removeEffect(
-                &EFEK(*player),
-                SPEED_BOOST);
-        }
+            if (JENIS(INFO(p)) == 'H' && isEffectExist(EFEK(*player), SPEED_BOOST))
+            {
+                printf("Kamu baru saja mempickup item heavy, ability SPEED BOOST mu hilang :(\n");
+                removeEffect(
+                    &EFEK(*player),
+                    SPEED_BOOST);
+            }
 
-        
-        printf("Pesanan berupa ");
-        displayJenis(&INFO(p));
-        printf(" berhasil diambil!!\n");
-        printf("Tujuan Pesanan: %c\n", TUJUAN(INFO(p)));
-        addItemToTasAndInProgress(player, INFO(p));
-        deleteAt(&TODO(*player), idx);
-    }
-    else if (!exist)
-    {
-        printf("Pesanan tidak ditemukan!\n");
-    }
-    else if (isTasFull(TAS_MOBITA(*player)))
-    {
-        printf("Tas mu penuh!\n");
+            printf("Pesanan berupa ");
+            displayJenis(&INFO(p));
+            printf(" berhasil diambil!!\n");
+            printf("Tujuan Pesanan: %c\n", TUJUAN(INFO(p)));
+            addItemToTasAndInProgress(player, INFO(p));
+            deleteAt(&TODO(*player), idx);
+        }
+        else if (!exist)
+        {
+            printf("Pesanan tidak ditemukan!\n");
+        }
+        else if (isTasFull(TAS_MOBITA(*player)))
+        {
+            printf("Tas mu penuh!\n");
+        }
     }
 }
 
@@ -182,6 +188,10 @@ void dropOff(Map peta, Queue *urutan, Mobita *player)
         {
             printf("Uang yang didapatkan : 600 Yen.\n");
             UANG(*player) += 600;
+            printf("Mendapatkan ability: RETURN TO SENDER!\n");
+            addEffect(&EFEK(*player), RETURN_TO_SENDER);
+            printf("Mendapat pesan dari shizuka\n");
+            printf("love you so muchhh!! <3\n");
         }
         removeItemFromTasAndInProgress(player);
 
@@ -199,6 +209,43 @@ void dropOff(Map peta, Queue *urutan, Mobita *player)
     }
 
     printf("\n");
+}
+
+void returnToSender(Mobita *player)
+{
+    if (isEffectExist(EFEK(*player), RETURN_TO_SENDER))
+    {
+        if (!isTasEmpty(TAS_MOBITA(*player)))
+        {
+            if (JENIS(TOP_TAS(TAS_MOBITA(*player))) == 'V')
+            {
+                printf("Tidak bisa melakukan return pada item VIP\n");
+            }
+            else
+            {
+                deleteFirst(&INPROGRESS(*player));
+
+                Pesanan returnItem;
+                popTas(&TAS_MOBITA(*player), &returnItem);
+
+                if (JENIS(returnItem) == 'P')
+                {
+                    PERISH(returnItem) = INITPERISH(returnItem);
+                }
+
+                insertLast(&TODO(*player), returnItem);
+                printf("Berhasil mengembalikan item ke pengirim\n");
+            }
+        }
+        else
+        {
+            printf("Tidak ada pesanan yang dapat dikembalikan!\n");
+        }
+    }
+    else
+    {
+        printf("Tida punya ability return to sender!\n");
+    }
 }
 
 void displayMapColor(Map peta, Queue *urutan, Mobita *player)
@@ -409,13 +456,14 @@ void help()
     printf("1. MOVE\n");
     printf("2. PICKUP\n");
     printf("3. DROPOFF\n");
-    printf("4. MAP\n");
-    printf("5. TODO\n");
-    printf("6. INPROGRESS\n");
-    printf("7. BUY\n");
-    printf("8. INVENTORY\n");
-    printf("9. HELP\n");
-    printf("10.EXIT\n");
+    printf("4. RETURN\n");
+    printf("5. MAP\n");
+    printf("6. TODO\n");
+    printf("7. INPROGRESS\n");
+    printf("8. BUY\n");
+    printf("9. INVENTORY\n");
+    printf("10.HELP\n");
+    printf("11.EXIT\n");
 }
 
 void saveGame(Mobita *player, Queue *urutan)
@@ -425,7 +473,7 @@ void saveGame(Mobita *player, Queue *urutan)
     original = fopen(fileKonfig, "r");
     printf("Masukkan name save file: ");
     startInputWord();
-    char* name = akusisi(currentWord);
+    char *name = akusisi(currentWord);
     copy = fopen(name, "w");
     if (!original || !copy)
     {
@@ -438,6 +486,8 @@ void saveGame(Mobita *player, Queue *urutan)
     fclose(copy);
 
     copy = fopen(name, "a");
+
+    fprintf(copy, "\nvalid_save");
 
     fprintf(copy, "\n%d", UANG(*player));
     fprintf(copy, "\n%d", WAKTU(*player));
@@ -487,7 +537,7 @@ void saveGame(Mobita *player, Queue *urutan)
     int lengthInProgress = length(inProgress);
     int lengthQueuePesanan = lengthQueue(*urutan);
 
-    fprintf(copy, "\n%d", lengthTodo + lengthInProgress + lengthQueuePesanan);
+    fprintf(copy, "\n%d", lengthTodo + lengthQueuePesanan);
 
     for (int i = 0; i < lengthTodo; i++)
     {
@@ -503,20 +553,6 @@ void saveGame(Mobita *player, Queue *urutan)
         todo = NEXT(todo);
     }
 
-    for (int i = 0; i < lengthInProgress; i++)
-    {
-        ElType inProgressPesanan = INFO(inProgress);
-        if (inProgressPesanan.jenis != 'P')
-        {
-            fprintf(copy, "\n%d %c %c %c", inProgressPesanan.waktu, inProgressPesanan.asal, inProgressPesanan.tujuan, inProgressPesanan.jenis);
-        }
-        else
-        {
-            fprintf(copy, "\n%d %c %c %c %d", inProgressPesanan.waktu, inProgressPesanan.asal, inProgressPesanan.tujuan, inProgressPesanan.jenis, inProgressPesanan.perishable);
-        }
-        todo = NEXT(inProgress);
-    }
-
     for (int i = 0; i < lengthQueuePesanan; i++)
     {
         ElType val;
@@ -529,6 +565,22 @@ void saveGame(Mobita *player, Queue *urutan)
         {
             fprintf(copy, "\n%d %c %c %c %d", val.waktu, val.asal, val.tujuan, val.jenis, val.perishable);
         }
+    }
+
+    fprintf(copy, "\n%d", lengthInProgress);
+
+    for (int i = 0; i < lengthInProgress; i++)
+    {
+        ElType inProgressPesanan = INFO(inProgress);
+        if (inProgressPesanan.jenis != 'P')
+        {
+            fprintf(copy, "\n%d %c %c %c", inProgressPesanan.waktu, inProgressPesanan.asal, inProgressPesanan.tujuan, inProgressPesanan.jenis);
+        }
+        else
+        {
+            fprintf(copy, "\n%d %c %c %c %d", inProgressPesanan.waktu, inProgressPesanan.asal, inProgressPesanan.tujuan, inProgressPesanan.jenis, inProgressPesanan.perishable);
+        }
+        inProgress = NEXT(inProgress);
     }
 
     fprintf(copy, "\n");
@@ -547,7 +599,7 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
             insertFirst(&TODO(*player), val);
         }
     }
-    
+
     printf("Silahkan pilih command: ");
     Word pilihan;
     startInputWord();
@@ -563,6 +615,10 @@ void pilihCommand(Map peta, Queue *urutan, Mobita *player, Gadget *gadget)
     else if (!strings_not_equal(pilihan, "DROPOFF"))
     {
         dropOff(peta, urutan, player);
+    }
+    else if (!strings_not_equal(pilihan, "RETURN"))
+    {
+        returnToSender(player);
     }
     else if (!strings_not_equal(pilihan, "MAP"))
     {
@@ -699,8 +755,16 @@ int main()
                 loadName = akusisi(currentWord);
                 exist = fopen(loadName, "r");
             }
-            loadGame(&peta, &daftar, &player, loadName, gadgets);
-            printf("Load game berhasil\n");
+            int successLoad = loadGame(&peta, &daftar, &player, loadName, gadgets);
+            if (successLoad)
+            {
+                printf("Load game berhasil\n");
+            }
+            else
+            {
+                printf("Bukan save game yang valid! Fatal error\n");
+                return 0;
+            }
         }
 
         sortPesanan(&daftar);

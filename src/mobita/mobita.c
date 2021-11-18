@@ -10,14 +10,15 @@ void createMobita(Mobita *m)
     Inventory i;
     EffectList l;
     Tas t;
-    // inisialisasi objek anak
+    // inisialisasi objek anak, < ini apa wkwkwk >
+    // eksploitasi anak
     POINT p = MakePOINT(0, 0);
     createInventory(&i);
     createEffectList(&l);
     createTas(&t);
     // assign tiap properti objek
     INVENTORY(*m) = i;
-    UANG(*m) = 10000;
+    UANG(*m) = 2500;
     WAKTU(*m) = -1;
     POSISI(*m) = p;
     TODO(*m) = NULL;
@@ -248,7 +249,7 @@ void useGadget(Mobita *player, Gadget g)
         }
         else
         {
-            printf("Kamu memakai Senter Pengecil, di bagian atas tas itu item heavy, efek buruknya dia gaakaan ngaruh ke kamu!");
+            printf("Kamu memakai Senter Pengecil, di bagian atas tas itu item heavy, efek buruknya dia gaakaan ngaruh ke kamu!\n");
             addEffect(&EFEK(*player), SENTER_PENGECIL);
         }
     }
